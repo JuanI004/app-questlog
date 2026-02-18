@@ -16,7 +16,7 @@ export const vendSans = Vend_Sans({
 });
 
 export const metadata = {
-  title: "Questlog",
+  title: "QuestLog",
   description:
     "QuestLog es una plataforma que transforma el estudio en una experiencia RPG",
 };

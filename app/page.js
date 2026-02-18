@@ -56,14 +56,14 @@ export default function Home() {
           className="absolute pt-12 w-screen h-screen object-cover 
         brightness-35"
         ></Image>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#060e18] via-transparent to-transparent z-[1]" />
+        <div className="absolute inset-0 bg-linear-to-t from-[#060e18] via-transparent to-transparent z-1" />
 
         <div
           className="pt-12 px-14 lg:px-0 relative max-w-220 flex items-center justify-center
-        md:justify-normal h-screen w-screen text-center md:text-left  "
+        md:justify-normal h-screen w-screen text-center md:text-left "
         >
           <div className="relative z-10 max-w-220 flex flex-col items-center md:items-start">
-            <h2 className="text-white text-5xl w-full md:w-4/5 font-bold">
+            <h2 className="title text-white text-5xl w-full md:w-4/5 font-bold">
               Estudiar ya no es una tarea.
               <br />
               <span className="text-[#F0C040] drop-shadow-[0_0_14px_rgba(212,160,23,0.7)]">
@@ -76,7 +76,7 @@ export default function Home() {
             </p>
             <button
               className="
-                mt-3 text-sm font-bold tracking-widest uppercase text-[#0a1828]
+                mt-4 text-sm font-bold tracking-widest uppercase text-[#0a1828]
                 bg-gradient-to-b from-[#F0C040] to-[#D4A017] border-b-4 border-[#8B6914]
                 px-8 py-3 rounded-[4px] shadow-[0_0_30px_rgba(212,160,23,0.3)]
                 hover:shadow-[0_0_40px_rgba(212,160,23,0.5)] hover:-translate-y-0.5
@@ -105,7 +105,7 @@ export default function Home() {
             <Image
               src={arrowDown}
               alt="scroll down"
-              className="absolute bottom-3 left-1/2 transform cursor-pointer -translate-x-1/2 
+              className="absolute bottom-1 left-1/2 transform cursor-pointer -translate-x-1/2 
           w-8 h-auto animate-bounce "
             />
           </a>
@@ -136,7 +136,7 @@ export default function Home() {
           <span className="w-2 h-2 bg-[#D4A017] rotate-45" />
           <span className="h-px w-16 bg-linear-to-l from-transparent to-[#D4A017]/60" />
         </div>
-        <h2 className=" pt-5 text-3xl text-center font-bold text-[#F0C040] drop-shadow-[0_0_14px_rgba(212,160,23,0.7)]  z-2">
+        <h2 className="title font-vend pt-5 text-3xl text-center font-bold text-[#F0C040] drop-shadow-[0_0_14px_rgba(212,160,23,0.7)]  z-2">
           Bienvenidos a QuestLog
         </h2>
 
@@ -164,7 +164,7 @@ export default function Home() {
                 alt={f.title}
                 className="w-20 h-20 mb-2 drop-shadow-[0_0_14px_rgba(95,153,245,0.7)]"
               />
-              <h3 className="font-cinzel text-sm font-bold text-[#F0C040] tracking-wide">
+              <h3 className="title font-cinzel text-sm font-bold text-[#F0C040] tracking-wide">
                 {f.title}
               </h3>
               <p className="text-slate-400 text-sm leading-relaxed text-center">
