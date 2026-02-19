@@ -3,147 +3,137 @@
 import Image from "next/image";
 import signupImg from "@/public/signup.png";
 import { useState } from "react";
+import { supabase } from "@/lib/supabase";
+import Input from "@/components/Input";
 
 export default function CrearCuenta() {
   const [errores, setErrores] = useState({});
+  const [mensaje, setMensaje] = useState("");
+  const [loading, setLoading] = useState(false);
   const [SignUp, setSignUp] = useState({
     email: "",
     password: "",
     confirmPassword: "",
   });
   function validarForm() {
+    const newErrores = {};
+
     if (!SignUp.email.trim()) {
-      setErrores((prev) => ({
-        ...prev,
-        email: "El correo electrónico es obligatorio",
-      }));
-      return false;
+      newErrores.email = "El correo electrónico es obligatorio";
+    } else if (!/\S+@\S+\.\S+/.test(SignUp.email)) {
+      newErrores.email = "El correo electrónico no es válido";
     }
+
     if (!SignUp.password.trim()) {
-      setErrores((prev) => ({
-        ...prev,
-        password: "La contraseña es obligatoria",
-      }));
-      return false;
+      newErrores.password = "La contraseña es obligatoria";
+    } else if (SignUp.password.length < 6) {
+      newErrores.password = "La contraseña debe tener al menos 6 caracteres";
     }
+
     if (!SignUp.confirmPassword.trim()) {
-      setErrores((prev) => ({
-        ...prev,
-        confirmPassword: "La confirmación de contraseña es obligatoria",
-      }));
-      return false;
+      newErrores.confirmPassword =
+        "La confirmación de contraseña es obligatoria";
+    } else if (SignUp.password !== SignUp.confirmPassword) {
+      newErrores.confirmPassword = "Las contraseñas no coinciden";
     }
-    if (SignUp.password !== SignUp.confirmPassword) {
-      setErrores((prev) => ({
-        ...prev,
-        confirmPassword: "Las contraseñas no coinciden",
-      }));
-      return false;
-    }
-    if (SignUp.password.length < 6) {
-      setErrores((prev) => ({
-        ...prev,
-        password: "La contraseña debe tener al menos 6 caracteres",
-      }));
-      return false;
-    }
-    if (!/\S+@\S+\.\S+/.test(SignUp.email)) {
-      setErrores((prev) => ({
-        ...prev,
-        email: "El correo electrónico no es válido",
-      }));
-      return false;
-    }
-    return true;
+
+    setErrores(newErrores);
+    return Object.keys(newErrores).length === 0;
   }
-  function handleSubmit(e) {
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (validarForm()) {
+    setErrores({});
+    setMensaje("");
+
+    if (!validarForm()) return;
+
+    setLoading(true);
+    const { error } = await supabase.auth.signUp({
+      email: SignUp.email,
+      password: SignUp.password,
+    });
+    setLoading(false);
+
+    if (error) {
+      setErrores({ general: error.message });
+    } else {
+      setMensaje("¡Cuenta creada! Revisá tu correo para confirmar tu cuenta.");
     }
   }
   return (
     <div
-      className="w-screen h-screen pt-12 flex items-center justify-center 
-    bg-[url('@/public/background.png')] bg-[#0B1C2C] bg-cover bg-center
-     "
+      className="flex  bg-linear-to-b from-[#1a3a60] to-[#0f2340] 
+              rounded-sm border border-[#2a5a8a] max-w-lg drop-shadow-[0_0_14px_rgba(95,153,245,0.7)]"
     >
-      <div
-        className="flex  bg-linear-to-b from-[#1a3a60] to-[#0f2340] 
-              rounded-sm border border-[#2a5a8a] max-w-lg "
-      >
-        <div className="flex flex-col p-5 gap-3">
-          <h2 className="title text-2xl text-[#F0C040]">
-            Comienza tu aventura.
-          </h2>
-          <p className="text-slate-400 text-xs">
-            Crea tu cuenta, acepta tus primeras misiones y empieza a subir de
-            nivel en tu camino de estudio.
-          </p>
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="email" className="text-xs text-slate-300">
-                Correo electrónico
-              </label>
-              <input
-                className="w-full text-xs p-2 bg-[#0f2340] border border-[#2a5a8a] rounded-sm text-white focus:outline-0"
-                type="email"
-                required
-                id="email"
-                onChange={(e) =>
-                  setSignUp((prev) => ({ ...prev, email: e.target.value }))
-                }
-              />
-            </div>
-            <div className="mt-2">
-              <label htmlFor="password" className="text-xs text-slate-300">
-                Contraseña
-              </label>
-              <input
-                className="w-full text-xs p-2 bg-[#0f2340] border border-[#2a5a8a] rounded-sm text-white focus:outline-0"
-                type="password"
-                required
-                id="password"
-                onChange={(e) =>
-                  setSignUp((prev) => ({ ...prev, password: e.target.value }))
-                }
-              />
-            </div>
-            <div className="mt-2">
-              <label htmlFor="password" className="text-xs text-slate-300">
-                Repetir contraseña
-              </label>
-              <input
-                className="w-full text-xs p-2 bg-[#0f2340] border border-[#2a5a8a] rounded-sm text-white focus:outline-0"
-                type="password"
-                required
-                id="confirmPassword"
-                onChange={(e) =>
-                  setSignUp((prev) => ({
-                    ...prev,
-                    confirmPassword: e.target.value,
-                  }))
-                }
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full mt-4 text-sm font-bold tracking-widest uppercase text-[#0a1828]
+      <div className="flex flex-col p-5 gap-3">
+        <h2 className="title text-2xl text-[#F0C040]">Comienza tu aventura.</h2>
+        <p className="text-slate-400 text-xs">
+          Crea tu cuenta, acepta tus primeras misiones y empieza a subir de
+          nivel en tu camino de estudio.
+        </p>
+        <form onSubmit={handleSubmit}>
+          <Input
+            label="Correo electrónico"
+            errores={errores.email}
+            value={SignUp.email}
+            type="text"
+            handleChange={(value) => {
+              setSignUp((prev) => ({ ...prev, email: value }));
+              setErrores((prev) => ({ ...prev, email: "" }));
+            }}
+          />
+          <Input
+            label="Contraseña"
+            type="password"
+            handleChange={(value) => {
+              setSignUp((prev) => ({ ...prev, password: value }));
+              setErrores((prev) => ({ ...prev, password: "" }));
+            }}
+            errores={errores.password}
+            value={SignUp.password}
+          />
+          <Input
+            label="Repetir contraseña"
+            type="password"
+            handleChange={(value) => {
+              setSignUp((prev) => ({ ...prev, confirmPassword: value }));
+              setErrores((prev) => ({ ...prev, confirmPassword: "" }));
+            }}
+            errores={errores.confirmPassword}
+            value={SignUp.confirmPassword}
+          />
+          <button
+            disabled={loading || mensaje}
+            type="submit"
+            className={`w-full mt-4 text-sm font-bold tracking-widest uppercase text-[#0a1828]
                 bg-linear-to-b from-[#F0C040] to-[#D4A017] border-b-4 border-[#8B6914]
                 px-8 py-3 rounded-sm shadow-[0_0_30px_rgba(212,160,23,0.3)]
                 hover:-translate-y-0.5
                 active:translate-y-0.5 active:border-b-2
-                transition-all duration-200 cursor-pointer"
-            >
-              Registrarse
-            </button>
-          </form>
-        </div>
-        <Image
-          src={signupImg}
-          alt="Login image"
-          className="hidden sm:block w-3/4 h-auto rounded-r-sm object-cover"
-        />
+                transition-all duration-200 cursor-pointer ${loading || (mensaje && "cursor-not-allowed opacity-70")}`}
+          >
+            {loading ? "Registrando..." : "Registrarse"}
+          </button>
+        </form>
+
+        {errores.general && (
+          <p className="text-red-500 text-xs mt-1">{errores.general}</p>
+        )}
+        {mensaje && (
+          <p
+            className="text-xs text-emerald-400 border border-emerald-800 
+              bg-emerald-950/40 rounded-sm px-3 py-2"
+          >
+            {mensaje}
+          </p>
+        )}
       </div>
+      <Image
+        src={signupImg}
+        alt="Login image"
+        className="hidden sm:block w-3/4 h-auto rounded-r-sm object-cover"
+      />
     </div>
   );
 }

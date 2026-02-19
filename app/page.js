@@ -63,7 +63,7 @@ export default function Home() {
         md:justify-normal h-screen w-screen text-center md:text-left "
         >
           <div className="relative z-10 max-w-220 flex flex-col items-center md:items-start">
-            <h2 className="title text-white text-5xl w-full md:w-4/5 font-bold">
+            <h2 className="title text-white text-5xl w-full md:w-full font-bold">
               Estudiar ya no es una tarea.
               <br />
               <span className="text-[#F0C040] drop-shadow-[0_0_14px_rgba(212,160,23,0.7)]">
@@ -98,7 +98,7 @@ export default function Home() {
             <Image
               src={swordImg}
               alt="Sword"
-              className="w-full h-auto drop-shadow-[0_0_30px_rgba(42,171,181,0.4)]"
+              className="w-full h-auto drop-shadow-[0_0_40px_rgba(212,160,23,0.7)]"
             />
           </div>
           <a href="#info" className="z-20">
