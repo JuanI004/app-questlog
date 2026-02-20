@@ -53,32 +53,31 @@ export default function Home() {
         <Image
           src={bannerImg}
           alt="Banner image"
-          className="absolute pt-12 w-screen h-screen object-cover 
+          className="absolute pt-20 w-screen h-screen object-cover 
         brightness-35"
         ></Image>
         <div className="absolute inset-0 bg-linear-to-t from-[#060e18] via-transparent to-transparent z-1" />
 
         <div
-          className="pt-12 px-14 lg:px-0 relative max-w-220 flex items-center justify-center
-        md:justify-normal h-screen w-screen text-center md:text-left "
+          className="pt-20 px-14 lg:px-0 relative max-w-screen-2xl flex items-center justify-center
+    xl:justify-normal h-screen w-screen text-center xl:text-left mx-auto"
         >
-          <div className="relative z-10 max-w-220 flex flex-col items-center md:items-start">
-            <h2 className="title text-white text-5xl w-full md:w-full font-bold">
+          <div className="relative px-4 z-10 max-w-220 flex flex-col items-center xl:items-start">
+            <h2 className="title text-white text-[4rem]  xl:text-[4.5rem] w-full  font-bold">
               Estudiar ya no es una tarea.
               <br />
               <span className="text-[#F0C040] drop-shadow-[0_0_14px_rgba(212,160,23,0.7)]">
-                {" "}
                 Es una Quest
               </span>
             </h2>
-            <p className="text-slate-300 mt-4">
+            <p className="text-slate-300 text-2xl mt-4">
               Sube de nivel, desbloquea logros y domina tus habilidades.
             </p>
             <button
               className="
-                mt-4 text-sm font-bold tracking-widest uppercase text-[#0a1828]
+                mt-6 text-xl font-bold tracking-widest uppercase text-[#0a1828]
                 bg-linear-to-b from-[#F0C040] to-[#D4A017] border-b-4 border-[#8B6914]
-                px-8 py-3 rounded-sm shadow-[0_0_30px_rgba(212,160,23,0.3)]
+                px-10 py-5 rounded-sm shadow-[0_0_30px_rgba(212,160,23,0.3)]
                 hover:shadow-[0_0_40px_rgba(212,160,23,0.5)] hover:-translate-y-0.5
                 active:translate-y-0.5 active:border-b-2
                 transition-all duration-200 cursor-pointer"
@@ -87,7 +86,7 @@ export default function Home() {
             </button>
           </div>
           <div
-            className="hidden md:block w-28 absolute right-14 top-16  h-auto pointer-events-none"
+            className="hidden xl:block w-56 absolute right-[8%] 2xl:right-[15%] top-28 h-auto pointer-events-none"
             style={{
               transform: `translateY(${scrollY * 0.5}px)`,
               opacity: swordOpacity,
@@ -105,8 +104,8 @@ export default function Home() {
             <Image
               src={arrowDown}
               alt="scroll down"
-              className="absolute bottom-1 left-1/2 transform cursor-pointer -translate-x-1/2 
-          w-8 h-auto animate-bounce "
+              className="absolute bottom-4 left-1/2 transform cursor-pointer -translate-x-1/2 
+    w-14 h-auto animate-bounce"
             />
           </a>
         </div>
@@ -127,29 +126,29 @@ export default function Home() {
         <Image
           src={logoImg}
           alt="Logo de QuestLog"
-          className="w-48 h-auto mt-20 pb-5 drop-shadow-[0_0_20px_rgba(212,160,23,0.5)] z-2"
+          className="w-72 h-auto mt-20 pb-5 drop-shadow-[0_0_20px_rgba(212,160,23,0.5)] z-2"
         />
-        <div className="flex items-center gap-3 z-2">
-          <span className="h-px w-16 bg-linear-to-r from-transparent to-[#D4A017]/60" />
-          <span className="w-2 h-2 bg-[#D4A017] rotate-45" />
-          <span className="w-1.5 h-1.5 bg-[#2AABB5] rotate-45" />
-          <span className="w-2 h-2 bg-[#D4A017] rotate-45" />
-          <span className="h-px w-16 bg-linear-to-l from-transparent to-[#D4A017]/60" />
+        <div className="flex items-center gap-4 z-2">
+          <span className="h-0.75 w-16 bg-linear-to-r from-transparent to-[#D4A017]/60" />
+          <span className="w-3.5 h-3.5 bg-[#D4A017] rotate-45" />
+          <span className="w-2.5 h-2.5 bg-[#2AABB5] rotate-45" />
+          <span className="w-3.5 h-3.5 bg-[#D4A017] rotate-45" />
+          <span className="h-0.75 w-16 bg-linear-to-l from-transparent to-[#D4A017]/60" />
         </div>
-        <h2 className="title font-vend pt-5 text-3xl text-center font-bold text-[#F0C040] drop-shadow-[0_0_14px_rgba(212,160,23,0.7)]  z-2">
+        <h2 className="title font-vend pt-5 text-4xl text-center font-bold text-[#F0C040] drop-shadow-[0_0_14px_rgba(212,160,23,0.7)]  z-2">
           Bienvenidos a QuestLog
         </h2>
 
-        <p className="text-slate-300 mt-6 max-w-xl text-center px-4 z-2">
+        <p className="text-slate-300 mt-6 max-w-xl text-center text-xl px-4 z-2">
           En QuestLog, el conocimiento es poder y cada día es una nueva
           aventura. Transformá tus tareas en misiones, tus metas en logros y tu
           disciplina en experiencia. Subí de nivel como estudiante, desbloqueá
           habilidades y construí tu propio camino hacia la maestría.
         </p>
-        <p className="text-[#D4A017] mt-4 font-bold">
+        <p className="text-[#D4A017] mt-4 font-bold text-xl">
           Tu aventura académica comienza aquí.
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full p-6 max-w-220">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full h-75 p-6 max-w-350">
           {FEATURES.map((f, i) => (
             <div
               key={f.title}
@@ -162,12 +161,12 @@ export default function Home() {
               <Image
                 src={f.icon}
                 alt={f.title}
-                className="w-20 h-20 mb-2 drop-shadow-[0_0_14px_rgba(95,153,245,0.7)]"
+                className="w-30 h-30 mb-2 drop-shadow-[0_0_14px_rgba(95,153,245,0.7)]"
               />
-              <h3 className="title font-cinzel text-sm font-bold text-[#F0C040] tracking-wide">
+              <h3 className="title font-cinzel text-2xl font-bold text-[#F0C040] tracking-wide">
                 {f.title}
               </h3>
-              <p className="text-slate-400 text-sm leading-relaxed text-center">
+              <p className="text-slate-400 text-xl leading-relaxed text-center">
                 {f.desc}
               </p>
             </div>

@@ -54,21 +54,21 @@ export default function NavBar() {
   return (
     <>
       <nav
-        className="w-screen h-12 fixed top-0 left-0  bg-linear-to-t from-[#060e18] via-[#0a1828] to-[#0d1e30] px-5 
+        className="w-screen h-20 fixed top-0 left-0  bg-linear-to-t from-[#060e18] via-[#0a1828] to-[#0d1e30] px-5 
     flex justify-center z-60"
       >
-        <div className="w-full max-w-220 flex items-center justify-between">
+        <div className="w-full max-w-350 flex items-center justify-between">
           <Link href="/">
             <Image
               src={titleImg}
               alt="Questlog logo"
-              className="h-15 w-25 drop-shadow-[0_0_8px_rgba(212,160,23,0.4)] 
+              className="h-25 w-40 drop-shadow-[0_0_8px_rgba(212,160,23,0.4)] 
           cursor-pointer transition-all duration-200 hover:scale-105 
           hover:drop-shadow-[0_0_14px_rgba(212,160,23,0.7)]"
             />
           </Link>
 
-          <ul className="hidden sm:flex gap-5 text-[0.6rem] items-center">
+          <ul className="hidden md:flex gap-5 text-[1rem] items-center">
             {ITEMS.map((item) => (
               <li key={item.label}>
                 <Link href={item.href}>
@@ -100,8 +100,8 @@ export default function NavBar() {
             )}
           </ul>
           <button
-            className="sm:hidden flex flex-col justify-center items-center w-9 h-9 gap-1.25 
-            rounded-sm cursor-pointer transition-all duration-200 relative z-70"
+            className="md:hidden flex flex-col justify-center items-center w-12 h-12 gap-1.5 
+    rounded-sm cursor-pointer transition-all duration-200 relative z-70"
             style={{
               background: open ? "rgba(26,58,96,0.8)" : "transparent",
               border: open ? "1px solid #2a5a8a" : "1px solid transparent",
@@ -110,28 +110,28 @@ export default function NavBar() {
             aria-label="Menú"
           >
             <span
-              className="block h-[1.5px] rounded-full transition-all duration-300 origin-center"
+              className="block h-[2px] rounded-full transition-all duration-300 origin-center"
               style={{
-                width: open ? "16px" : "20px",
+                width: open ? "20px" : "26px",
                 background: open ? "#F0C040" : "#a08c50",
-                transform: open ? "translateY(6.5px) rotate(45deg)" : "none",
+                transform: open ? "translateY(8px) rotate(45deg)" : "none",
               }}
             />
             <span
-              className="block h-[1.5px] rounded-full transition-all duration-300"
+              className="block h-[2px] rounded-full transition-all duration-300"
               style={{
-                width: "14px",
+                width: "18px",
                 background: open ? "#F0C040" : "#a08c50",
                 opacity: open ? 0 : 1,
                 transform: open ? "scaleX(0)" : "scaleX(1)",
               }}
             />
             <span
-              className="block h-[1.5px] rounded-full transition-all duration-300 origin-center"
+              className="block h-[2px] rounded-full transition-all duration-300 origin-center"
               style={{
-                width: open ? "16px" : "20px",
+                width: open ? "20px" : "26px",
                 background: open ? "#F0C040" : "#a08c50",
-                transform: open ? "translateY(-6.5px) rotate(-45deg)" : "none",
+                transform: open ? "translateY(-8px) rotate(-45deg)" : "none",
               }}
             />
           </button>
@@ -144,14 +144,14 @@ export default function NavBar() {
       />
       {open && (
         <div
-          className="flex flex-col justify-between opacity-100 sm:opacity-0  ease-in-out transition-opacity duration-300 fixed h-[calc(100vh-3rem)] right-0 top-12 w-72 z-60 
+          className="flex flex-col justify-between opacity-100 md:opacity-0  ease-in-out transition-opacity duration-300 fixed h-[calc(100vh-3rem)] right-0 top-20 w-6/8 z-60 
         bg-linear-to-t from-[#060e18] via-[#0a1828] to-[#0d1e30] border-x-2 border-[#17324d] "
         >
           <div>
             <span className="absolute w-full h-0.75 bg-[linear-gradient(90deg,transparent,#D4A017,transparent)]" />
             <div className="flex justify-center items-center px-1 py-4 m-4 border-b border-[#2a5a8a]">
               <span className=" bg-[#D4A017] h-2 w-2 rotate-45 " />
-              <p className="px-3 text-[0.5rem] uppercase tracking-[4px] text-[#a08c50]">
+              <p className="px-3 text-[0.8rem] uppercase tracking-[4px] text-[#a08c50]">
                 Menú Principal
               </p>
               <span className=" bg-[#D4A017] h-2 w-2 rotate-45 " />
@@ -164,7 +164,7 @@ export default function NavBar() {
                     onClick={() => setOpen((prev) => !prev)}
                   >
                     <button
-                      className="flex justify-between w-full text-left px-3 py-2 text-xs font-extrabold uppercase tracking-widest 
+                      className="flex justify-between w-full text-left px-3 py-2 text-[1rem] font-extrabold uppercase tracking-widest 
                 rounded-md text-[#a08c50] hover:bg-[rgba(26,58,96,0.8)] hover:border
                 hover:border-[#2a5a8a] hover:text-[#F0C040] cursor-pointer transition-all duration-200 hover:scale-105 group"
                     >
@@ -180,7 +180,7 @@ export default function NavBar() {
                 <li>
                   <button
                     onClick={handleSignOut}
-                    className="flex justify-between w-full text-left px-3 py-2 text-xs font-extrabold uppercase tracking-widest 
+                    className="flex justify-between w-full text-left px-3 py-2 text-[1rem] font-extrabold uppercase tracking-widest 
               rounded-md text-[#a08c50] hover:bg-[rgba(26,58,96,0.8)] hover:border
               hover:border-[#2a5a8a] hover:text-[#F0C040] cursor-pointer transition-all duration-200 hover:scale-105 group"
                   >

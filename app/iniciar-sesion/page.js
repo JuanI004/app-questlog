@@ -56,22 +56,22 @@ export default function IniciarSesion() {
   }
   return (
     <div
-      className="w-screen h-screen pt-12 flex items-center justify-center 
+      className="w-screen h-screen pt-20 flex items-center justify-center 
     bg-[url('@/public/background.webp')] bg-[#0B1C2C] bg-cover bg-center
       overflow-scroll"
     >
       <div
-        className=" flex  bg-linear-to-b from-[#1a3a60] to-[#0f2340] 
-              rounded-sm border border-[#2a5a8a] max-w-lg drop-shadow-[0_0_14px_rgba(95,153,245,0.7)] "
+        className=" flex m-5 justify-between bg-linear-to-b from-[#1a3a60] to-[#0f2340] 
+              rounded-sm border border-[#2a5a8a] max-w-250 drop-shadow-[0_0_14px_rgba(95,153,245,0.7)] "
       >
-        <div className="flex flex-col gap-3 p-5">
-          <h2 className="title text-2xl text-[#F0C040]">
+        <div className="flex flex-col  gap-4 p-8">
+          <h2 className="title text-[2rem] text-[#F0C040]">
             Continúa tu aventura.
           </h2>
-          <p className="text-slate-400 text-xs">
+          <p className="text-slate-400 text-xl">
             Inicia sesión para retomar tus misiones y seguir subiendo de nivel.
           </p>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <Input
               label="Correo electrónico"
               errores={errores.email}
@@ -96,9 +96,9 @@ export default function IniciarSesion() {
             <button
               disabled={loading}
               type="submit"
-              className={`w-full mt-4 text-sm font-bold tracking-widest uppercase text-[#0a1828]
+              className={`w-full mt-4 text-xl font-bold tracking-widest uppercase text-[#0a1828]
                 bg-linear-to-b from-[#F0C040] to-[#D4A017] border-b-4 border-[#8B6914]
-                px-8 py-3 rounded-sm shadow-[0_0_30px_rgba(212,160,23,0.3)]
+                px-8 py-4 rounded-sm shadow-[0_0_30px_rgba(212,160,23,0.3)]
                 hover:-translate-y-0.5
                 active:translate-y-0.5 active:border-b-2
                 transition-all duration-200 cursor-pointer ${loading && "cursor-not-allowed opacity-70"}`}
@@ -108,16 +108,16 @@ export default function IniciarSesion() {
           </form>
           <Link
             href="/crear-cuenta"
-            className="text-xs text-slate-400 hover:text-[#F0C040] transition-colors"
+            className="text-xl text-slate-400 hover:text-[#F0C040] transition-colors"
           >
             ¿No tienes cuenta? Crea una aquí.
           </Link>
           {errores.general && (
-            <p className="text-red-500 text-xs mt-1">{errores.general}</p>
+            <p className="text-red-500 text-xl mt-1">{errores.general}</p>
           )}
           {mensaje && (
             <p
-              className="text-xs text-emerald-400 border border-emerald-800 
+              className="text-xl text-emerald-400 border border-emerald-800 
               bg-emerald-950/40 rounded-sm px-3 py-2"
             >
               {mensaje}
@@ -127,7 +127,7 @@ export default function IniciarSesion() {
         <Image
           src={loginImg}
           alt="Login image"
-          className="hidden sm:block w-2/4 h-auto rounded-r-sm object-cover"
+          className="hidden md:block w-2/5 h-auto rounded-r-sm object-cover "
         />
       </div>
     </div>

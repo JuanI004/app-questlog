@@ -49,10 +49,18 @@ export default function CrearCuenta() {
     if (!validarForm()) return;
 
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: SignUp.email,
       password: SignUp.password,
+      options: {
+        emailRedirectTo: "http://localhost:3000/auth/verificacion",
+      },
     });
+
+    if (!error && data.user && data.user.identities?.length === 0) {
+      setErrores({ general: "Ya existe una cuenta con ese correo." });
+      return;
+    }
     setLoading(false);
 
     if (error) {
@@ -63,16 +71,18 @@ export default function CrearCuenta() {
   }
   return (
     <div
-      className="flex  bg-linear-to-b from-[#1a3a60] to-[#0f2340] 
-              rounded-sm border border-[#2a5a8a] max-w-lg drop-shadow-[0_0_14px_rgba(95,153,245,0.7)]"
+      className="flex m-5 justify-between bg-linear-to-b from-[#1a3a60] to-[#0f2340] 
+              rounded-sm border border-[#2a5a8a] max-w-250 drop-shadow-[0_0_14px_rgba(95,153,245,0.7)]"
     >
-      <div className="flex flex-col p-5 gap-3">
-        <h2 className="title text-2xl text-[#F0C040]">Comienza tu aventura.</h2>
-        <p className="text-slate-400 text-xs">
+      <div className="flex flex-col p-8 gap-4">
+        <h2 className="title text-[2rem] text-[#F0C040]">
+          Comienza tu aventura.
+        </h2>
+        <p className="text-slate-400 text-xl">
           Crea tu cuenta, acepta tus primeras misiones y empieza a subir de
           nivel en tu camino de estudio.
         </p>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <Input
             label="Correo electrónico"
             errores={errores.email}
@@ -106,9 +116,9 @@ export default function CrearCuenta() {
           <button
             disabled={loading || mensaje}
             type="submit"
-            className={`w-full mt-4 text-sm font-bold tracking-widest uppercase text-[#0a1828]
+            className={`w-full mt-4 text-xl font-bold tracking-widest uppercase text-[#0a1828]
                 bg-linear-to-b from-[#F0C040] to-[#D4A017] border-b-4 border-[#8B6914]
-                px-8 py-3 rounded-sm shadow-[0_0_30px_rgba(212,160,23,0.3)]
+                px-8 py-4 rounded-sm shadow-[0_0_30px_rgba(212,160,23,0.3)]
                 hover:-translate-y-0.5
                 active:translate-y-0.5 active:border-b-2
                 transition-all duration-200 cursor-pointer ${loading || (mensaje && "cursor-not-allowed opacity-70")}`}
@@ -118,11 +128,11 @@ export default function CrearCuenta() {
         </form>
 
         {errores.general && (
-          <p className="text-red-500 text-xs mt-1">{errores.general}</p>
+          <p className="text-red-500 text-xl mt-1">{errores.general}</p>
         )}
         {mensaje && (
           <p
-            className="text-xs text-emerald-400 border border-emerald-800 
+            className="text-xl text-emerald-400 border border-emerald-800 
               bg-emerald-950/40 rounded-sm px-3 py-2"
           >
             {mensaje}
@@ -132,7 +142,7 @@ export default function CrearCuenta() {
       <Image
         src={signupImg}
         alt="Login image"
-        className="hidden sm:block w-3/4 h-auto rounded-r-sm object-cover"
+        className="hidden md:block w-2/5 h-auto rounded-r-sm object-cover "
       />
     </div>
   );

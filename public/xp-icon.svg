@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- Outer diamond frame -->
+  <polygon
+    points="60,4 116,60 60,116 4,60"
+    fill="#060e18"
+    stroke="#2AABB5"
+    stroke-width="2"
+  />
+  <!-- Inner diamond -->
+  <polygon
+    points="60,16 104,60 60,104 16,60"
+    fill="#0a1828"
+    stroke="#1a6a75"
+    stroke-width="1"
+  />
+
+  <!-- Corner diamonds -->
+  <rect x="57.5" y="1.5" width="5" height="5" fill="#2AABB5" transform="rotate(45 60 4)"/>
+  <rect x="57.5" y="113.5" width="5" height="5" fill="#2AABB5" transform="rotate(45 60 116)"/>
+  <rect x="1.5" y="57.5" width="5" height="5" fill="#2AABB5" transform="rotate(45 4 60)"/>
+  <rect x="113.5" y="57.5" width="5" height="5" fill="#2AABB5" transform="rotate(45 116 60)"/>
+
+  <!-- Burst lines -->
+  <line x1="60" y1="22" x2="60" y2="30" stroke="#2AABB5" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="60" y1="90" x2="60" y2="98" stroke="#2AABB5" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="22" y1="60" x2="30" y2="60" stroke="#2AABB5" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="90" y1="60" x2="98" y2="60" stroke="#2AABB5" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Diagonal ticks -->
+  <line x1="38" y1="38" x2="43" y2="43" stroke="#1a6a75" stroke-width="1" stroke-linecap="round"/>
+  <line x1="82" y1="38" x2="77" y2="43" stroke="#1a6a75" stroke-width="1" stroke-linecap="round"/>
+  <line x1="38" y1="82" x2="43" y2="77" stroke="#1a6a75" stroke-width="1" stroke-linecap="round"/>
+  <line x1="82" y1="82" x2="77" y2="77" stroke="#1a6a75" stroke-width="1" stroke-linecap="round"/>
+
+  <!-- Glow -->
+  <circle cx="60" cy="60" r="20" fill="#2AABB5" opacity="0.08"/>
+  <circle cx="60" cy="60" r="13" fill="#2AABB5" opacity="0.06"/>
+
+  <!-- Centro: diamante principal grande -->
+  <polygon points="60,44 64,60 60,76 56,60" fill="#7ee8f0" stroke="#2AABB5" stroke-width="0.5"/>
+  <polygon points="44,60 60,56 76,60 60,64" fill="#2AABB5" stroke="#7ee8f0" stroke-width="0.5"/>
+
+  <!-- Brillito arriba izquierda: diamante mediano -->
+  <polygon points="38,38 41,46 38,54 35,46" fill="#7ee8f0" stroke="#2AABB5" stroke-width="0.5" opacity="0.9"/>
+  <polygon points="30,46 38,43 46,46 38,49" fill="#2AABB5" stroke="#7ee8f0" stroke-width="0.5" opacity="0.9"/>
+
+  <!-- Brillito abajo derecha: diamante mediano -->
+  <polygon points="82,66 85,74 82,82 79,74" fill="#7ee8f0" stroke="#2AABB5" stroke-width="0.5" opacity="0.9"/>
+  <polygon points="74,74 82,71 90,74 82,77" fill="#2AABB5" stroke="#7ee8f0" stroke-width="0.5" opacity="0.9"/>
+
+  <!-- Brillito arriba derecha: diamante pequeño -->
+  <polygon points="78,36 80,42 78,48 76,42" fill="#2AABB5" opacity="0.7"/>
+  <polygon points="72,42 78,40 84,42 78,44" fill="#7ee8f0" opacity="0.7"/>
+
+  <!-- Brillito abajo izquierda: diamante pequeño -->
+  <polygon points="42,72 44,78 42,84 40,78" fill="#2AABB5" opacity="0.7"/>
+  <polygon points="36,78 42,76 48,78 42,80" fill="#7ee8f0" opacity="0.7"/>
+</svg>

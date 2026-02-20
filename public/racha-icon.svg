@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- Outer shield/flame frame -->
+  <polygon
+    points="60,4 116,30 116,80 60,116 4,80 4,30"
+    fill="#060e18"
+    stroke="#D4A017"
+    stroke-width="2"
+  />
+  <!-- Inner frame -->
+  <polygon
+    points="60,14 106,36 106,76 60,106 14,76 14,36"
+    fill="#0a1828"
+    stroke="#8B3A00"
+    stroke-width="1"
+  />
+
+  <!-- Corner diamonds -->
+  <rect x="57.5" y="1.5" width="5" height="5" fill="#ff6b35" transform="rotate(45 60 4)"/>
+  <rect x="57.5" y="113.5" width="5" height="5" fill="#ff6b35" transform="rotate(45 60 116)"/>
+  <rect x="1.5" y="57.5" width="5" height="5" fill="#D4A017" transform="rotate(45 4 60)"/>
+  <rect x="113.5" y="57.5" width="5" height="5" fill="#D4A017" transform="rotate(45 116 60)"/>
+
+  <!-- Burst lines -->
+  <line x1="60" y1="20" x2="60" y2="28" stroke="#ff6b35" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="60" y1="92" x2="60" y2="100" stroke="#ff6b35" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="20" y1="48" x2="27" y2="52" stroke="#D4A017" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="100" y1="48" x2="93" y2="52" stroke="#D4A017" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Glow -->
+  <circle cx="60" cy="65" r="22" fill="#ff6b35" opacity="0.08"/>
+  <circle cx="60" cy="65" r="14" fill="#F0C040" opacity="0.07"/>
+
+  <!-- Flame outer (orange) - forma de 🔥 -->
+  <path
+    d="M60,36 C55,44 44,50 44,62 C44,72 48,78 52,82 C50,76 52,70 56,68 C54,74 56,82 60,86 C64,82 66,74 64,68 C68,70 70,76 68,82 C72,78 76,72 76,62 C76,50 65,44 60,36Z"
+    fill="#ff6b35"
+  />
+
+  <!-- Flame middle (amber) -->
+  <path
+    d="M60,48 C57,54 50,58 50,66 C50,73 53,78 56,81 C55,76 57,71 59,69 C58,74 59,80 60,83 C61,80 62,74 61,69 C63,71 65,76 64,81 C67,78 70,73 70,66 C70,58 63,54 60,48Z"
+    fill="#D4A017"
+  />
+
+  <!-- Flame inner core (yellow) -->
+  <path
+    d="M60,58 C58,62 55,65 55,70 C55,75 57,79 60,81 C63,79 65,75 65,70 C65,65 62,62 60,58Z"
+    fill="#F0C040"
+  />
+
+  <!-- White hot center -->
+  <path
+    d="M60,65 C59,67 58,69 58,71 C58,74 59,76 60,77 C61,76 62,74 62,71 C62,69 61,67 60,65Z"
+    fill="white"
+    opacity="0.7"
+  />
+
+  <!-- Ember dots -->
+  <circle cx="51" cy="52" r="1.5" fill="#ff6b35" opacity="0.6"/>
+  <circle cx="70" cy="48" r="1" fill="#F0C040" opacity="0.7"/>
+  <circle cx="48" cy="62" r="1" fill="#ff6b35" opacity="0.4"/>
+  <circle cx="72" cy="58" r="1.5" fill="#D4A017" opacity="0.5"/>
+</svg>

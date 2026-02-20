@@ -40,17 +40,17 @@ export default function CrearPersonaje() {
   }
   return (
     <div
-      className="flex flex-col max-h-110 max-w-xl bg-linear-to-b from-[#1a3a60] to-[#0f2340] 
+      className="flex m-5 flex-col max-h-200 max-w-250 bg-linear-to-b from-[#1a3a60] to-[#0f2340] 
               rounded-sm border border-[#2a5a8a] drop-shadow-[0_0_14px_rgba(95,153,245,0.7)] overflow-scroll"
     >
-      <div className="flex mx-5 py-3 border-b border-[#2a5a8a] justify-center items-center gap-2">
-        <span className="w-1.5 h-1.5 bg-[#D4A017] rotate-45" />
-        <span className="w-2 h-2 bg-[#2AABB5] rotate-45" />
-        <h1 className="title  tracking-widest text-[#F0C040]">
+      <div className="flex mx-5 py-5 border-b border-[#2a5a8a] justify-center items-center gap-3">
+        <span className="w-2 h-2 bg-[#D4A017] rotate-45" />
+        <span className="w-3 h-3 bg-[#2AABB5] rotate-45" />
+        <h1 className="title text-2xl  tracking-widest text-[#F0C040]">
           Crea tu personaje
         </h1>
-        <span className="w-2 h-2 bg-[#2AABB5] rotate-45" />
-        <span className="w-1.5 h-1.5 bg-[#D4A017] rotate-45" />
+        <span className="w-3 h-3 bg-[#2AABB5] rotate-45" />
+        <span className="w-2 h-2 bg-[#D4A017] rotate-45" />
       </div>
       {section === 1 && (
         <SectionOne handleNextSection={handleNextSection} session={session} />

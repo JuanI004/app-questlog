@@ -71,14 +71,14 @@ export default function SectionOne({ handleNextSection, session }) {
   }
   return (
     <>
-      <p className="text-xs mx-5 pt-3 text-slate-400">
+      <p className="text-xl mx-5 pt-3 text-slate-400">
         Forja tu identidad de aventurero. Sube tu imagen y elige el nombre con
         el que serás conocido en el reino del conocimiento.
       </p>
       <div className="flex flex-col mx-5 py-4 h-full justify-center items-center gap-2">
         <div
           onClick={() => document.getElementById("avatar").click()}
-          className={`border-2 border-[#2a5a8a] w-40 h-40 rounded-full 
+          className={`border-2 border-[#2a5a8a] w-65 h-65 rounded-full 
   flex flex-col justify-center items-center gap-2 overflow-hidden cursor-pointer
   hover:border-[#F0C040] hover:bg-[#1a3a60]/30 transition-all duration-200 
   ${errores.image && "border-red-500 bg-red-900/70"}`}
@@ -87,37 +87,31 @@ export default function SectionOne({ handleNextSection, session }) {
             <Image
               src={image}
               alt="Avatar"
-              width={160}
-              height={160}
+              width={260}
+              height={260}
               className=" object-cover"
             />
           ) : (
             <>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="48"
-                height="48"
-                viewBox="0 0 100 100"
-                fill="none"
-                stroke="#2a5a8a"
-                strokeWidth="5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                width="52"
+                height="52"
+                fill="#044f7b"
+                viewBox="0 0 256 256"
               >
-                <rect x="8" y="15" width="84" height="70" rx="6" />
-                <circle cx="72" cy="35" r="8" />
-                <polyline points="8,80 35,48 55,68 68,55 92,80" />
+                <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,16V158.75l-26.07-26.06a16,16,0,0,0-22.63,0l-20,20-44-44a16,16,0,0,0-22.62,0L40,149.37V56ZM40,172l52-52,80,80H40Zm176,28H194.63l-36-36,20-20L216,181.38V200ZM144,100a12,12,0,1,1,12,12A12,12,0,0,1,144,100Z"></path>
               </svg>
-              <p className="text-center text-[#2a5a8a] text-xs">
+              <p className="text-center text-[#2a5a8a] text-xl">
                 Seleccionar imagen
               </p>
             </>
           )}
         </div>
         {errores.image && (
-          <p className="text-red-500 text-xs">{errores.image}</p>
+          <p className="text-red-500 text-xl">{errores.image}</p>
         )}
-        <form onSubmit={handleSubmit} className="flex flex-col w-60">
+        <form onSubmit={handleSubmit} className="flex flex-col w-100">
           <Input
             label="Nombre de Aventurero"
             errores={errores.name}
@@ -136,14 +130,14 @@ export default function SectionOne({ handleNextSection, session }) {
             onChange={handleFileChange}
           />
           {errores.general && (
-            <p className="text-red-500 text-xs mt-1">{errores.general}</p>
+            <p className="text-red-500 text-xl mt-1">{errores.general}</p>
           )}
           <button
             type="submit"
             className="
-                mt-4 text-sm font-bold tracking-widest uppercase text-[#0a1828]
+                mt-4 text-xl font-bold tracking-widest uppercase text-[#0a1828]
                 bg-linear-to-b from-[#F0C040] to-[#D4A017] border-b-4 border-[#8B6914]
-                px-8 py-3 rounded-sm shadow-[0_0_30px_rgba(212,160,23,0.3)]
+                px-8 py-4 rounded-sm shadow-[0_0_30px_rgba(212,160,23,0.3)]
                 hover:shadow-[0_0_40px_rgba(212,160,23,0.5)] hover:-translate-y-0.5
                 active:translate-y-0.5 active:border-b-2
                 transition-all duration-200 cursor-pointer"
