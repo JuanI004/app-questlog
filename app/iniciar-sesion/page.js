@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import loginImg from "@/public/login.png";
+import loginImg from "@/public/login.webp";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
@@ -57,7 +57,7 @@ export default function IniciarSesion() {
   return (
     <div
       className="w-screen h-screen pt-12 flex items-center justify-center 
-    bg-[url('@/public/background.png')] bg-[#0B1C2C] bg-cover bg-center
+    bg-[url('@/public/background.webp')] bg-[#0B1C2C] bg-cover bg-center
       overflow-scroll"
     >
       <div

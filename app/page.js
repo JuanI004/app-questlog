@@ -1,12 +1,12 @@
 "use client";
 import Image from "next/image";
-import bannerImg from "@/public/banner.png";
+import bannerImg from "@/public/banner.webp";
 import arrowDown from "@/public/arrow-down.svg";
-import misionesImg from "@/public/misiones.png";
-import logrosImg from "@/public/logros.png";
-import habilidadesImg from "@/public/habilidades.png";
-import logoImg from "@/public/logo.png";
-import swordImg from "@/public/sword.png";
+import misionesImg from "@/public/misiones.webp";
+import logrosImg from "@/public/logros.webp";
+import habilidadesImg from "@/public/habilidades.webp";
+import logoImg from "@/public/logo.webp";
+import swordImg from "@/public/sword.webp";
 import { useEffect, useState } from "react";
 
 const FEATURES = [
@@ -77,8 +77,8 @@ export default function Home() {
             <button
               className="
                 mt-4 text-sm font-bold tracking-widest uppercase text-[#0a1828]
-                bg-gradient-to-b from-[#F0C040] to-[#D4A017] border-b-4 border-[#8B6914]
-                px-8 py-3 rounded-[4px] shadow-[0_0_30px_rgba(212,160,23,0.3)]
+                bg-linear-to-b from-[#F0C040] to-[#D4A017] border-b-4 border-[#8B6914]
+                px-8 py-3 rounded-sm shadow-[0_0_30px_rgba(212,160,23,0.3)]
                 hover:shadow-[0_0_40px_rgba(212,160,23,0.5)] hover:-translate-y-0.5
                 active:translate-y-0.5 active:border-b-2
                 transition-all duration-200 cursor-pointer"
@@ -115,7 +115,7 @@ export default function Home() {
         id="info"
         className="relative flex flex-col justify-center items-center w-screen min-h-screen bg-[#0B1C2C] overflow-hidden"
       >
-        <div className="absolute inset-0 bg-linear-to-b from-[#060e18] via-transparent to-transparent z-[1]" />
+        <div className="absolute inset-0 bg-linear-to-b from-[#060e18] via-transparent to-transparent z-1" />
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{

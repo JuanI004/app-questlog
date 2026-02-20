@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import signupImg from "@/public/signup.png";
+import signupImg from "@/public/signup.webp";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import Input from "@/components/Input";

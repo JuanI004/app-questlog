@@ -1,7 +1,7 @@
 "use client";
 
 import { supabase } from "@/lib/supabase";
-import titleImg from "@/public/title.png";
+import titleImg from "@/public/title.webp";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -100,7 +100,7 @@ export default function NavBar() {
             )}
           </ul>
           <button
-            className="sm:hidden flex flex-col justify-center items-center w-9 h-9 gap-[5px] 
+            className="sm:hidden flex flex-col justify-center items-center w-9 h-9 gap-1.25 
             rounded-sm cursor-pointer transition-all duration-200 relative z-70"
             style={{
               background: open ? "rgba(26,58,96,0.8)" : "transparent",

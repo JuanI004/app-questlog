@@ -1,29 +1,15 @@
 import Image from "next/image";
 import Input from "./Input";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { useRouter } from "next/navigation";
 
-export default function SectionOne({ handleNextSection }) {
+export default function SectionOne({ handleNextSection, session }) {
   const [data, setData] = useState({
     name: "",
     image: null,
   });
   const [errores, setErrores] = useState({});
-
   const [image, setImage] = useState(null);
-  const [session, setSession] = useState(null);
-  const router = useRouter();
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data, error }) => {
-      if (error || !data.session) {
-        setSession(null);
-        router.push("/iniciar-sesion");
-      } else {
-        setSession(data.session);
-      }
-    });
-  }, [router]);
 
   function handleFileChange(e) {
     const file = e.target.files[0];
@@ -62,7 +48,6 @@ export default function SectionOne({ handleNextSection }) {
         .update({
           username: data.name,
           image_url: imageUrl,
-          nuevo: false,
         })
         .eq("user_id", session.user.id);
       if (error) throw error;
@@ -86,7 +71,7 @@ export default function SectionOne({ handleNextSection }) {
   }
   return (
     <>
-      <p className="text-xs mx-5 pt-3 text-white">
+      <p className="text-xs mx-5 pt-3 text-slate-400">
         Forja tu identidad de aventurero. Sube tu imagen y elige el nombre con
         el que serás conocido en el reino del conocimiento.
       </p>
