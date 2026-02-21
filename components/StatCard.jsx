@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function StatCard({ label, value, icon }) {
+export default function StatCard({ label, value, color, icon }) {
   return (
     <div
       className="flex flex-col items-center justify-center gap-1 px-4 py-8
@@ -8,7 +8,13 @@ export default function StatCard({ label, value, icon }) {
       hover:border-[#F0C040]/40 transition-all duration-300 group"
     >
       <Image src={icon} alt={label} width={60} height={60} />
-      <p className="title text-4xl text-[#F0C040] drop-shadow-[0_0_8px_rgba(212,160,23,0.5)]">
+      <p
+        className="title text-4xl"
+        style={{
+          color: color,
+          textShadow: `0 0 8px ${color}80`,
+        }}
+      >
         {value ?? "—"}
       </p>
       <p className="text-lg uppercase tracking-[3px] text-[#64748b] group-hover:text-[#a08c50] transition-colors">

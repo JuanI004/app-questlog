@@ -144,8 +144,8 @@ export default function NavBar() {
       />
       {open && (
         <div
-          className="flex flex-col justify-between opacity-100 md:opacity-0  ease-in-out transition-opacity duration-300 fixed h-[calc(100vh-3rem)] right-0 top-20 w-6/8 z-60 
-        bg-linear-to-t from-[#060e18] via-[#0a1828] to-[#0d1e30] border-x-2 border-[#17324d] "
+          className={`flex flex-col justify-between  w-6/8 opacity-100 md:opacity-0  ease-in-out transition-all duration-300  ${open && "w-6/8"} fixed h-[calc(100vh-3rem)] right-0 top-20  z-60 
+        bg-linear-to-t from-[#060e18] via-[#0a1828] to-[#0d1e30] border-x-2 border-[#17324d] `}
         >
           <div>
             <span className="absolute w-full h-0.75 bg-[linear-gradient(90deg,transparent,#D4A017,transparent)]" />

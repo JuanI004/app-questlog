@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import signupImg from "@/public/signup.webp";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import Input from "@/components/Input";
+import { useRouter } from "next/navigation";
 
 export default function CrearCuenta() {
   const [errores, setErrores] = useState({});
@@ -15,6 +16,14 @@ export default function CrearCuenta() {
     password: "",
     confirmPassword: "",
   });
+  const router = useRouter();
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data, error }) => {
+      if (error || data.session) {
+        router.push("/");
+      }
+    });
+  }, [router]);
   function validarForm() {
     const newErrores = {};
 

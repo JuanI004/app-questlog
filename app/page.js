@@ -8,6 +8,7 @@ import habilidadesImg from "@/public/habilidades.webp";
 import logoImg from "@/public/logo.webp";
 import swordImg from "@/public/sword.webp";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const FEATURES = [
   {
@@ -59,8 +60,8 @@ export default function Home() {
         <div className="absolute inset-0 bg-linear-to-t from-[#060e18] via-transparent to-transparent z-1" />
 
         <div
-          className="pt-20 px-14 lg:px-0 relative max-w-screen-2xl flex items-center justify-center
-    xl:justify-normal h-screen w-screen text-center xl:text-left mx-auto"
+          className="pt-20 md:px-14 lg:px-0 relative max-w-screen-2xl flex items-center justify-center
+    xl:justify-normal min-h-screen w-screen text-center xl:text-left mx-auto"
         >
           <div className="relative px-4 z-10 max-w-220 flex flex-col items-center xl:items-start">
             <h2 className="title text-white text-[4rem]  xl:text-[4.5rem] w-full  font-bold">
@@ -73,17 +74,19 @@ export default function Home() {
             <p className="text-slate-300 text-2xl mt-4">
               Sube de nivel, desbloquea logros y domina tus habilidades.
             </p>
-            <button
-              className="
+            <Link href="/dashboard">
+              <button
+                className="
                 mt-6 text-xl font-bold tracking-widest uppercase text-[#0a1828]
                 bg-linear-to-b from-[#F0C040] to-[#D4A017] border-b-4 border-[#8B6914]
                 px-10 py-5 rounded-sm shadow-[0_0_30px_rgba(212,160,23,0.3)]
                 hover:shadow-[0_0_40px_rgba(212,160,23,0.5)] hover:-translate-y-0.5
                 active:translate-y-0.5 active:border-b-2
                 transition-all duration-200 cursor-pointer"
-            >
-              Comenzar Aventura
-            </button>
+              >
+                Comenzar Aventura
+              </button>
+            </Link>
           </div>
           <div
             className="hidden xl:block w-56 absolute right-[8%] 2xl:right-[15%] top-28 h-auto pointer-events-none"
@@ -148,7 +151,7 @@ export default function Home() {
         <p className="text-[#D4A017] mt-4 font-bold text-xl">
           Tu aventura académica comienza aquí.
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full h-75 p-6 max-w-350">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full  p-6 max-w-350">
           {FEATURES.map((f, i) => (
             <div
               key={f.title}

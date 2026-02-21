@@ -2,7 +2,7 @@
 import Image from "next/image";
 import loginImg from "@/public/login.webp";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import Input from "@/components/Input";
 import Link from "next/link";
@@ -15,6 +15,13 @@ export default function IniciarSesion() {
     email: "",
     password: "",
   });
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data, error }) => {
+      if (error || data.session) {
+        router.push("/");
+      }
+    });
+  }, [router]);
   function validarForm() {
     const newErrores = {};
 
