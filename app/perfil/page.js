@@ -72,7 +72,7 @@ export default function Perfil() {
     );
   }
   return (
-    <div className="relative w-screen pt-24 pb-5 flex flex-col items-center justify-start min-h-screen overflow-scroll">
+    <div className="relative w-screen pt-20 pb-5 flex flex-col items-center justify-start min-h-screen overflow-scroll">
       <div
         className="fixed inset-0 bg-cover bg-center -z-10"
         style={{

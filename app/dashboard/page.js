@@ -15,7 +15,7 @@ const SECTIONS = {
 
 export default function Dashboard() {
   const [session, setSession] = useState(null);
-  const [section, setSection] = useState(1);
+  const [section, setSection] = useState("1");
   const [player, setPlayer] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -68,7 +68,7 @@ export default function Dashboard() {
           filter: "brightness(0.4) saturate(0.8)",
         }}
       />
-      <div className="flex flex-col my-4 sm:flex-row justify-between w-7/8 gap-4 px-10 lg:w-6/8 py-6 rounded-sm border-[#2a5a8a]  items-center bg-[#060e18]/95 border">
+      <div className="flex flex-col my-4 sm:flex-row justify-between w-7/8 gap-4 px-10 lg:w-5/8 py-6 rounded-sm border-[#2a5a8a]  items-center bg-[#060e18]/80 border">
         <div className="relative flex items-center gap-4 ">
           <div className="relative  shrink-0 h-20 w-20 border-2 border-[#3977b6] rounded-full  drop-shadow-[0_0_20px_rgba(95,153,245,0.4)]">
             {player?.image_url ? (
@@ -114,7 +114,7 @@ export default function Dashboard() {
         </div>
       </div>
       <div
-        className="grid grid-cols-1 sm:grid-cols-3   max-h-250 w-7/8 lg:w-6/8 bg-linear-to-br from-[#0d1e30] via-[#0a1828] to-[#060e18]
+        className="grid grid-cols-1 sm:grid-cols-3   max-h-250 w-7/8 lg:w-5/8 bg-linear-to-br from-[#0d1e30] via-[#0a1828] to-[#060e18]
                       rounded-sm border border-[#2a5a8a]  "
       >
         {Object.entries(SECTIONS).map(([key, value]) => (
@@ -133,10 +133,10 @@ export default function Dashboard() {
         ))}
       </div>
       <div
-        className="flex  flex-col max-h-250 w-7/8 lg:w-6/8 bg-linear-to-br from-[#0d1e30] via-[#0a1828] to-[#060e18]
-                      rounded-sm border border-[#2a5a8a] drop-shadow-[0_0_14px_rgba(95,153,245,0.7)]  "
+        className="flex  flex-col max-h-250 w-7/8 p-3 lg:w-5/8 bg-linear-to-br from-[#0d1e30] via-[#0a1828] to-[#060e18]
+                      rounded-sm border border-[#2a5a8a] drop-shadow-[0_0_14px_rgba(95,153,245,0.4)]  "
       >
-        <Estudiar />
+        {section === "1" && <Estudiar />}
       </div>
     </div>
   );
