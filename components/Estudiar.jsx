@@ -1,6 +1,8 @@
 import { useState } from "react";
 import InputDashboard from "./InputDashboard";
 import PomodoroItem from "./PomodoroItem";
+import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 
 const MATERIAS = [
   "Matemáticas",
@@ -20,9 +22,11 @@ const PRESETS = [
   { label: "Corto", estudio: 15, descanso: 3, sesiones: 6 },
 ];
 
-export default function Estudiar() {
-  const [data, setData] = useState(null);
+export default function Estudiar({ session }) {
+  const [formData, setFormData] = useState(null);
   const [errores, setErrores] = useState({});
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [pomodoroTime, setPomodoroTime] = useState({
     estudio: 25,
     descanso: 5,
@@ -51,6 +55,48 @@ export default function Estudiar() {
       };
     });
   };
+  const validarFormulario = () => {
+    const newErrores = {};
+    if (!formData?.materia) {
+      newErrores.materia = "Selecciona una materia";
+    }
+    setErrores(newErrores);
+    return Object.keys(newErrores).length === 0;
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validarFormulario()) {
+      return;
+    }
+
+    setLoading(true);
+    const { data, error } = await supabase.rpc("iniciar_sesion", {
+      p_materia: formData?.materiaPersonalizada || formData?.materia,
+      p_descripcion: formData?.descripcion ?? "",
+      p_estudio_min: pomodoroTime.estudio,
+      p_descanso_min: pomodoroTime.descanso,
+      p_cantidad_sesiones: pomodoroTime.sesiones,
+    });
+    setLoading(false);
+    if (error) {
+      if (error.message.includes("Límite")) {
+        setErrores({ general: "Alcanzaste el límite de sesiones por hoy." });
+        return;
+      }
+      if (error.message.includes("tiempo")) {
+        setErrores({
+          general:
+            "Error en el temporizador pomodoro. Los tiempos no son válidos.",
+        });
+        return;
+      }
+      setErrores({ general: "Error al crear la sesión. Intenta de nuevo." });
+      return;
+    }
+    console.log(data);
+    router.push(`/dashboard/sesion/${data}`);
+  };
   const tiempoTotalEstimado =
     pomodoroTime.estudio * pomodoroTime.sesiones +
     pomodoroTime.descanso * (pomodoroTime.sesiones - 1);
@@ -65,10 +111,10 @@ export default function Estudiar() {
           {MATERIAS.map((materia, index) => (
             <div key={index} className="p-1 text-sm">
               <button
-                onClick={() => setData((prev) => ({ ...prev, materia }))}
+                onClick={() => setFormData((prev) => ({ ...prev, materia }))}
                 className={`flex justify-center items-center w-full py-2 px-4 border border-[#2a5a8a] bg-[#060e18]
                 uppercase  rounded-sm  md:text-lg  cursor-pointer ${
-                  data?.materia === materia
+                  formData?.materia === materia
                     ? "bg-linear-to-b from-[#1a3a60] to-[#0f2340] text-[#F0C040]  border-[#F0C040]"
                     : "text-[#64748b] hover:text-[#a08c50] hover:bg-[#0f2340]/50"
                 }`}
@@ -78,27 +124,30 @@ export default function Estudiar() {
             </div>
           ))}
         </div>
+        {errores.materia && (
+          <p className="text-red-500 text-md">{errores.materia}</p>
+        )}
       </div>
-      <form className="flex flex-col w-full gap-5">
-        {data?.materia === "Otra" && (
+      <form className="flex flex-col w-full gap-5" onSubmit={handleSubmit}>
+        {formData?.materia === "Otra" && (
           <InputDashboard
             label="¿Que materia?"
-            value={data?.materiaPersonalizada}
+            value={formData?.materiaPersonalizada}
             type="text"
             placeholder="Escribe la materia que quieras estudiar"
             onChange={(value) =>
-              setData((prev) => ({ ...prev, materiaPersonalizada: value }))
+              setFormData((prev) => ({ ...prev, materiaPersonalizada: value }))
             }
           />
         )}
         <InputDashboard
-          value={data?.descripcion}
+          value={formData?.descripcion}
           label="Descripción"
           opcional={true}
           type="text"
           placeholder="Ej: Ejercicios de integrales, repasar historia medieval, etc."
           onChange={(value) =>
-            setData((prev) => ({ ...prev, descripcion: value }))
+            setFormData((prev) => ({ ...prev, descripcion: value }))
           }
         />
 
@@ -170,12 +219,8 @@ export default function Estudiar() {
               <PomodoroItem
                 label="Descanso"
                 value={pomodoroTime.descanso}
-                min={1}
-                max={30}
                 unidad="m"
-                onClickIncrement={() =>
-                  incrementPomodoro("descanso", pomodoroTime.estudio)
-                }
+                onClickIncrement={() => incrementPomodoro("descanso", 30)}
                 onClickDecrement={() => decrementPomodoro("descanso", 1)}
               />
               <PomodoroItem
@@ -204,6 +249,9 @@ export default function Estudiar() {
         )}
         {errores.pomodoro && (
           <p className="text-red-500 text-md">{errores.pomodoro}</p>
+        )}
+        {errores.general && (
+          <p className="text-red-500 text-md">{errores.general}</p>
         )}
         <button
           className="
