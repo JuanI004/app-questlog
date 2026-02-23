@@ -1,9 +1,38 @@
 "use client";
 import InputDashboard from "@/components/InputDashboard";
+import IntroScreen from "@/components/IntroScreen";
 import { supabase } from "@/lib/supabase";
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
+const PRIORIDADES = [
+  {
+    valor: "baja",
+    label: "Baja",
+    color: "#2AABB5",
+    colorRgb: "42,171,181",
+    bg: "rgba(42,171,181,0.06)",
+    border: "rgba(42,171,181,0.3)",
+  },
+  {
+    valor: "media",
+    label: "Media",
+    color: "#D4A017",
+    colorRgb: "212,160,23",
+    bg: "rgba(212,160,23,0.06)",
+    border: "rgba(212,160,23,0.3)",
+  },
+
+  {
+    valor: "alta",
+    label: "Alta",
+    color: "#ef4444",
+    colorRgb: "239,68,68",
+    bg: "rgba(239,68,68,0.06)",
+    border: "rgba(239,68,68,0.3)",
+  },
+];
 
 export default function SesionPage({ params }) {
   const [loading, setLoading] = useState(true);
@@ -16,9 +45,12 @@ export default function SesionPage({ params }) {
   const [fase, setFase] = useState("batalla");
   const [tareas, setTareas] = useState([]);
   const [nuevaTarea, setNuevaTarea] = useState("");
+  const [prioridad, setPrioridad] = useState();
+  const [introTerminada, setIntroTerminada] = useState(false);
 
   const timerColor = fase === "descanso" ? "#2AABB5" : "#D4A017";
   const timerColorRgb = fase === "descanso" ? "42,171,181" : "212,160,23";
+  let tareasHechas = tareas.filter((t) => t.completada).length;
 
   useEffect(() => {
     supabase
@@ -43,6 +75,8 @@ export default function SesionPage({ params }) {
       setSegundos((prev) => {
         if (prev <= 1) {
           if (fase === "batalla") {
+            const audio = new Audio("/bell.mp3");
+            audio.play();
             if (ronda >= sesion.cantidad_sesiones) {
               setIsRunning(false);
               return 0;
@@ -50,6 +84,8 @@ export default function SesionPage({ params }) {
             setFase("descanso");
             return sesion.descanso_min * 60;
           } else {
+            const audio = new Audio("/bell.mp3");
+            audio.play();
             setFase("batalla");
             setRonda((prevRonda) => prevRonda + 1);
             return sesion.estudio_min * 60;
@@ -60,6 +96,22 @@ export default function SesionPage({ params }) {
     }, 1000);
     return () => clearInterval(timer);
   }, [isRunning, segundos, fase, ronda]);
+
+  function toggleTarea(id) {
+    setTareas((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, completada: !t.completada } : t)),
+    );
+  }
+
+  function eliminarTarea(id) {
+    setTareas((prev) => prev.filter((t) => t.id !== id));
+  }
+
+  const tareasOrdenadas = [...tareas].sort((a, b) => {
+    if (a.completada !== b.completada) return a.completada ? 1 : -1;
+    const orden = { alta: 0, media: 1, baja: 2 };
+    return orden[a.prioridad] - orden[b.prioridad];
+  });
 
   if (loading) {
     return (
@@ -78,13 +130,19 @@ export default function SesionPage({ params }) {
   }
   return (
     <>
+      {!introTerminada && (
+        <IntroScreen
+          materia={sesion.materia}
+          onDone={() => setIntroTerminada(true)}
+        />
+      )}
       <div
         className="flex mt-4 sm:flex-row justify-between w-7/8 gap-4 px-10 lg:w-5/8 py-6 rounded-sm
      border-[#2a5a8a]  items-center bg-[#060e18]/80 border"
       >
         <div className="relative flex-col items-center gap-4 ">
           <p className="text-slate-500 uppercase tracking-[4px]">
-            Sesion activa
+            Sesión activa
           </p>
           <h2 className="title text-[2rem] uppercase font-bold text-[#D4A017]">
             {sesion.materia}
@@ -215,10 +273,43 @@ export default function SesionPage({ params }) {
             <p className="text-sm text-center text-slate-400">
               Parte al enemigo en pedazos. Una tarea a la vez
             </p>
+            {tareas.length > 0 && (
+              <div className="relative flex gap-4 items-center justify-center ">
+                <span className="w-4/5 bg-[#0a1727]  h-1 rounded-full "></span>
+                <span
+                  className="absolute left-4 bg-[#D4A017] max-w-4/5 h-1 rounded-full transition-all duration-300"
+                  style={{ width: `${(tareasHechas / tareas.length) * 100}%` }}
+                ></span>
+                <p className="text-slate-400 text-xs">
+                  {tareasHechas} / {tareas.length}
+                </p>
+              </div>
+            )}
           </div>
 
-          <span className="px-4 h-px w-7/8 bg-[#2a5a8a] mx-auto" />
-          <div className="py-2 px-4 flex flex-col gap-4 ">
+          <span className="px-4 h-px w-11/12 bg-[#2a5a8a] mx-auto" />
+          <div className="p-4 flex flex-col gap-2 ">
+            <div className="grid grid-cols-3 gap-4  items-center">
+              {PRIORIDADES.map((p) => (
+                <button
+                  key={p.valor}
+                  onClick={() => setPrioridad(p.valor)}
+                  className="border rounded-sm uppercase cursor-pointer text-xs
+                   tracking-wide py-0.5"
+                  style={{
+                    background: prioridad === p.valor ? p.bg : "transparent",
+                    borderColor: prioridad === p.valor ? p.border : "#2a5a8a",
+                    color: prioridad === p.valor ? p.color : "#64748b",
+                    boxShadow:
+                      prioridad === p.valor
+                        ? `0 0 8px rgba(${p.colorRgb},0.2)`
+                        : "none",
+                  }}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
             <div className="flex gap-2 h-10 items-center justify-center">
               <InputDashboard
                 label=""
@@ -228,8 +319,22 @@ export default function SesionPage({ params }) {
               />
               <button
                 onClick={() => {
-                  if (nuevaTarea.trim() === "" || fase === "descanso") return;
-                  setTareas((prev) => [...prev, nuevaTarea.trim()]);
+                  if (
+                    nuevaTarea.trim() === "" ||
+                    fase === "descanso" ||
+                    prioridad === undefined
+                  )
+                    return;
+                  setTareas((prev) => [
+                    ...prev,
+                    {
+                      id: Date.now(),
+                      texto: nuevaTarea.trim(),
+                      prioridad,
+                      completada: false,
+                    },
+                  ]);
+                  setPrioridad();
                   setNuevaTarea("");
                 }}
                 className="px-4 py-2.5 mt-3 border border-[#2a5a8a] bg-transparent text-[#a08c50]  
@@ -258,16 +363,104 @@ export default function SesionPage({ params }) {
               </p>
             </div>
           ) : (
-            <ul className="flex flex-col w-full gap-2 px-4 py-2">
-              {tareas.map((tarea, index) => (
-                <li key={index} className="text-slate-400">
-                  {tarea}
+            <ul className="flex flex-col w-full gap-2 px-4 py-3 ">
+              {tareasOrdenadas.map((tarea, index) => (
+                <li
+                  key={index}
+                  className="p-2 rounded-sm border flex  group justify-between"
+                  style={{
+                    background: tarea.completada
+                      ? "rgba(30,40,30,0.4)"
+                      : PRIORIDADES.find((p) => p.valor === tarea.prioridad)
+                          ?.bg,
+                    borderColor: tarea.completada
+                      ? "#434d5a"
+                      : PRIORIDADES.find((p) => p.valor === tarea.prioridad)
+                          ?.border,
+                  }}
+                >
+                  <div className="flex items-center gap-3">
+                    <span
+                      className="h-full w-1 rounded-sm"
+                      style={{
+                        backgroundColor: tarea.completada
+                          ? "#434d5a"
+                          : PRIORIDADES.find((p) => p.valor === tarea.prioridad)
+                              ?.color,
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => toggleTarea(tarea.id)}
+                      className="w-5 h-5 shrink-0 rounded-sm border flex items-center justify-center cursor-pointer transition-all"
+                      style={{
+                        borderColor: tarea.completada
+                          ? "#22c55e"
+                          : PRIORIDADES.find((p) => p.valor === tarea.prioridad)
+                              ?.color,
+                        background: tarea.completada
+                          ? "rgba(34,197,94,0.15)"
+                          : "transparent",
+                        opacity: tarea.completada ? 0.6 : 1,
+                      }}
+                    >
+                      {tarea.completada && (
+                        <span style={{ color: "#22c55e", fontSize: "0.6rem" }}>
+                          ✓
+                        </span>
+                      )}
+                    </button>
+                    <div className="flex flex-col gap-1 ">
+                      <p
+                        className="max-w-[100px] text-sm break-words"
+                        style={{
+                          color: tarea.completada ? "#64748b" : "#e2e8f0",
+                          textDecoration: tarea.completada
+                            ? "line-through"
+                            : "none",
+                        }}
+                      >
+                        {tarea.texto}
+                      </p>
+                      <p
+                        className="uppercase text-xs tracking-wide font-bold"
+                        style={{
+                          color: tarea.completada
+                            ? "#434d5a"
+                            : PRIORIDADES.find(
+                                (p) => p.valor === tarea.prioridad,
+                              )?.color,
+                        }}
+                      >
+                        {tarea.prioridad}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => eliminarTarea(tarea.id)}
+                    className="opacity-0 group-hover:opacity-100 text-lg transition-all cursor-pointer px-1 "
+                    style={{
+                      color: tarea.completada
+                        ? "#434d5a"
+                        : PRIORIDADES.find((p) => p.valor === tarea.prioridad)
+                            ?.color,
+                    }}
+                  >
+                    ✕
+                  </button>
                 </li>
               ))}
             </ul>
           )}
         </div>
       </div>
+      <button
+        className="px-4 py-2 rounded-sm uppercase tracking-wide font-bold border border-[#2a5a8a] 
+      text-[#a08c50] bg-[#060e18]/80 hover:bg-[#060e18] hover:text-[#D4A017] cursor-pointer transition-all"
+      >
+        Abandonar Sesión
+      </button>
     </>
   );
 }

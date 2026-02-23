@@ -94,7 +94,9 @@ export default function Estudiar({ session }) {
       setErrores({ general: "Error al crear la sesión. Intenta de nuevo." });
       return;
     }
-    console.log(data);
+    const audio = new Audio("/intro.mp3");
+    audio.volume = 0.5;
+    audio.play();
     router.push(`/dashboard/sesion/${data}`);
   };
   const tiempoTotalEstimado =
