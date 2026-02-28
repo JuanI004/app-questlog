@@ -1,12 +1,13 @@
 "use client";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import xpIcon from "@/public/xp-icon.svg";
 import monedasIcon from "@/public/monedas-icon.svg";
 import Estudiar from "@/components/Estudiar";
 import { useDashboard } from "./layout";
 import placeholderImg from "@/public/placeholder.webp";
+import ModalRecompensas from "@/components/ModalRecompensas";
 
 const SECTIONS = {
   1: "Estudiar",
@@ -16,13 +17,25 @@ const SECTIONS = {
 
 export default function Dashboard() {
   const { session, player, setPlayer } = useDashboard();
+  const [recompensas, setRecompensas] = useState(true);
   const [section, setSection] = useState("1");
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
-
+  const searchParams = useSearchParams();
+  let xpGanado = searchParams.get("xp");
+  let monedasGanadas = searchParams.get("monedas");
   return (
     <>
       <div className="flex flex-col my-4 sm:flex-row justify-between w-7/8 gap-4 px-10 lg:w-5/8 py-6 rounded-sm border-[#2a5a8a]  items-center bg-[#060e18]/80 border">
+        {xpGanado && monedasGanadas && recompensas ? (
+          <ModalRecompensas
+            xp={xpGanado}
+            monedas={monedasGanadas}
+            onConfirm={() => {
+              setRecompensas(false);
+            }}
+          />
+        ) : (
+          <></>
+        )}
         <div className="relative flex items-center gap-4 ">
           <div className="relative  shrink-0 h-20 w-20 border-2 border-[#3977b6] rounded-full  drop-shadow-[0_0_20px_rgba(95,153,245,0.4)]">
             {player?.image_url ? (

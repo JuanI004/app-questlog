@@ -1,6 +1,7 @@
 "use client";
 import InputDashboard from "@/components/InputDashboard";
 import IntroScreen from "@/components/IntroScreen";
+import ModalAbandonar from "@/components/ModalAbandonar";
 import { supabase } from "@/lib/supabase";
 
 import { useParams, useRouter } from "next/navigation";
@@ -34,12 +35,22 @@ const PRIORIDADES = [
   },
 ];
 
+const MENSAJES_VICTORIA = [
+  "¡Enemigo derrotado!",
+  "¡Excelente trabajo!",
+  "¡Imparable!",
+  "¡Así se hace, guerrero!",
+  "¡Un paso más hacia la victoria!",
+  "¡Otro obstáculo eliminado!",
+  "¡Magnífico!",
+  "¡Objetivo cumplido!",
+];
+
 export default function SesionPage({ params }) {
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const [sesion, setSesion] = useState(null);
   const router = useRouter();
-  const [isRunning, setIsRunning] = useState(false);
   const [segundos, setSegundos] = useState(null);
   const [ronda, setRonda] = useState(1);
   const [fase, setFase] = useState("batalla");
@@ -47,7 +58,9 @@ export default function SesionPage({ params }) {
   const [nuevaTarea, setNuevaTarea] = useState("");
   const [prioridad, setPrioridad] = useState();
   const [introTerminada, setIntroTerminada] = useState(false);
-
+  const [mensajeVictoria, setMensajeVictoria] = useState("");
+  const [modalAbandonar, setModalAbandonar] = useState(false);
+  const [sesionTerminada, setSesionTerminada] = useState(false);
   const timerColor = fase === "descanso" ? "#2AABB5" : "#D4A017";
   const timerColorRgb = fase === "descanso" ? "42,171,181" : "212,160,23";
   let tareasHechas = tareas.filter((t) => t.completada).length;
@@ -59,7 +72,7 @@ export default function SesionPage({ params }) {
       .eq("id", id)
       .single()
       .then(({ data, error }) => {
-        if (error || !data) {
+        if (error || !data || data.finalizada_at) {
           router.push("/dashboard");
           return;
         }
@@ -68,9 +81,21 @@ export default function SesionPage({ params }) {
         setLoading(false);
       });
   }, [id, router]);
-
   useEffect(() => {
-    if (!isRunning) return;
+    if (!sesionTerminada) return;
+    async function finalizarSesion() {
+      const { data, error } = await supabase.rpc("finalizar_sesion", {
+        p_sesion_id: id,
+      });
+      console.log("data completa:", JSON.stringify(data));
+      console.log("error:", error);
+      router.push(
+        `/dashboard?xp=${data.xp_ganado}&monedas=${data.monedas_ganadas}`,
+      );
+    }
+    finalizarSesion();
+  }, [sesionTerminada]);
+  useEffect(() => {
     const timer = setInterval(() => {
       setSegundos((prev) => {
         if (prev <= 1) {
@@ -78,7 +103,7 @@ export default function SesionPage({ params }) {
             const audio = new Audio("/bell.mp3");
             audio.play();
             if (ronda >= sesion.cantidad_sesiones) {
-              setIsRunning(false);
+              setSesionTerminada(true);
               return 0;
             }
             setFase("descanso");
@@ -95,14 +120,32 @@ export default function SesionPage({ params }) {
       });
     }, 1000);
     return () => clearInterval(timer);
-  }, [isRunning, segundos, fase, ronda]);
-
+  }, [segundos, fase, ronda]);
+  async function cancelarSesion() {
+    await supabase
+      .from("sesiones")
+      .update({ cancelada: true, finalizada_at: new Date().toISOString() })
+      .eq("id", id);
+    router.push("/dashboard");
+  }
   function toggleTarea(id) {
     setTareas((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, completada: !t.completada } : t)),
+      prev.map((t) => {
+        if (t.id === id) {
+          if (!t.completada) {
+            const mensaje =
+              MENSAJES_VICTORIA[
+                Math.floor(Math.random() * MENSAJES_VICTORIA.length)
+              ];
+            setMensajeVictoria(mensaje);
+            setTimeout(() => setMensajeVictoria(null), 2000);
+          }
+          return { ...t, completada: !t.completada };
+        }
+        return t;
+      }),
     );
   }
-
   function eliminarTarea(id) {
     setTareas((prev) => prev.filter((t) => t.id !== id));
   }
@@ -112,7 +155,6 @@ export default function SesionPage({ params }) {
     const orden = { alta: 0, media: 1, baja: 2 };
     return orden[a.prioridad] - orden[b.prioridad];
   });
-
   if (loading) {
     return (
       <div className="w-screen h-screen flex items-center justify-center bg-[#060e18]">
@@ -221,24 +263,6 @@ export default function SesionPage({ params }) {
                 }}
               />
             </div>
-            <button
-              type="button"
-              onClick={() => setIsRunning((prev) => !prev)}
-              className="mt-1 px-6 py-1.5 text-md font-bold uppercase tracking-[4px] rounded-sm border z-10 transition-all cursor-pointer"
-              style={{
-                borderColor: `rgba(${timerColorRgb},0.3)`,
-                color: timerColor,
-                background: `rgba(${timerColorRgb},0.05)`,
-              }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.background = `rgba(${timerColorRgb},0.12)`)
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.background = `rgba(${timerColorRgb},0.05)`)
-              }
-            >
-              {isRunning ? "⏸ Pausar" : "▶ Continuar"}
-            </button>
           </div>
           <div
             className={`relative not-visited:flex flex-col justify-center items-center  w-full aspect-video rounded-sm
@@ -363,99 +387,124 @@ export default function SesionPage({ params }) {
               </p>
             </div>
           ) : (
-            <ul className="flex flex-col w-full gap-2 px-4 py-3 ">
-              {tareasOrdenadas.map((tarea, index) => (
-                <li
-                  key={index}
-                  className="p-2 rounded-sm border flex  group justify-between"
-                  style={{
-                    background: tarea.completada
-                      ? "rgba(30,40,30,0.4)"
-                      : PRIORIDADES.find((p) => p.valor === tarea.prioridad)
-                          ?.bg,
-                    borderColor: tarea.completada
-                      ? "#434d5a"
-                      : PRIORIDADES.find((p) => p.valor === tarea.prioridad)
-                          ?.border,
-                  }}
-                >
-                  <div className="flex items-center gap-3">
-                    <span
-                      className="h-full w-1 rounded-sm"
-                      style={{
-                        backgroundColor: tarea.completada
-                          ? "#434d5a"
-                          : PRIORIDADES.find((p) => p.valor === tarea.prioridad)
-                              ?.color,
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => toggleTarea(tarea.id)}
-                      className="w-5 h-5 shrink-0 rounded-sm border flex items-center justify-center cursor-pointer transition-all"
-                      style={{
-                        borderColor: tarea.completada
-                          ? "#22c55e"
-                          : PRIORIDADES.find((p) => p.valor === tarea.prioridad)
-                              ?.color,
-                        background: tarea.completada
-                          ? "rgba(34,197,94,0.15)"
-                          : "transparent",
-                        opacity: tarea.completada ? 0.6 : 1,
-                      }}
-                    >
-                      {tarea.completada && (
-                        <span style={{ color: "#22c55e", fontSize: "0.6rem" }}>
-                          ✓
-                        </span>
-                      )}
-                    </button>
-                    <div className="flex flex-col gap-1 ">
-                      <p
-                        className="max-w-[100px] text-sm break-words"
+            <>
+              <ul className="relative flex flex-col w-full gap-2 px-4 py-3 ">
+                {tareasOrdenadas.map((tarea, index) => (
+                  <li
+                    key={index}
+                    className="p-2 rounded-sm border flex  group justify-between"
+                    style={{
+                      background: tarea.completada
+                        ? "rgba(30,40,30,0.4)"
+                        : PRIORIDADES.find((p) => p.valor === tarea.prioridad)
+                            ?.bg,
+                      borderColor: tarea.completada
+                        ? "#434d5a"
+                        : PRIORIDADES.find((p) => p.valor === tarea.prioridad)
+                            ?.border,
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span
+                        className="h-full w-1 rounded-sm"
                         style={{
-                          color: tarea.completada ? "#64748b" : "#e2e8f0",
-                          textDecoration: tarea.completada
-                            ? "line-through"
-                            : "none",
-                        }}
-                      >
-                        {tarea.texto}
-                      </p>
-                      <p
-                        className="uppercase text-xs tracking-wide font-bold"
-                        style={{
-                          color: tarea.completada
+                          backgroundColor: tarea.completada
                             ? "#434d5a"
                             : PRIORIDADES.find(
                                 (p) => p.valor === tarea.prioridad,
                               )?.color,
                         }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => toggleTarea(tarea.id)}
+                        className="w-5 h-5 shrink-0 rounded-sm border flex items-center justify-center cursor-pointer transition-all"
+                        style={{
+                          borderColor: tarea.completada
+                            ? "#22c55e"
+                            : PRIORIDADES.find(
+                                (p) => p.valor === tarea.prioridad,
+                              )?.color,
+                          background: tarea.completada
+                            ? "rgba(34,197,94,0.15)"
+                            : "transparent",
+                          opacity: tarea.completada ? 0.6 : 1,
+                        }}
                       >
-                        {tarea.prioridad}
-                      </p>
+                        {tarea.completada && (
+                          <span
+                            style={{ color: "#22c55e", fontSize: "0.6rem" }}
+                          >
+                            ✓
+                          </span>
+                        )}
+                      </button>
+                      <div className="flex flex-col gap-1 ">
+                        <p
+                          className="max-w-25 text-sm wrap-break-words"
+                          style={{
+                            color: tarea.completada ? "#64748b" : "#e2e8f0",
+                            textDecoration: tarea.completada
+                              ? "line-through"
+                              : "none",
+                          }}
+                        >
+                          {tarea.texto}
+                        </p>
+                        <p
+                          className="uppercase text-xs tracking-wide font-bold"
+                          style={{
+                            color: tarea.completada
+                              ? "#434d5a"
+                              : PRIORIDADES.find(
+                                  (p) => p.valor === tarea.prioridad,
+                                )?.color,
+                          }}
+                        >
+                          {tarea.prioridad}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => eliminarTarea(tarea.id)}
-                    className="opacity-0 group-hover:opacity-100 text-lg transition-all cursor-pointer px-1 "
-                    style={{
-                      color: tarea.completada
-                        ? "#434d5a"
-                        : PRIORIDADES.find((p) => p.valor === tarea.prioridad)
-                            ?.color,
-                    }}
-                  >
-                    ✕
-                  </button>
-                </li>
-              ))}
-            </ul>
+                    <button
+                      type="button"
+                      onClick={() => eliminarTarea(tarea.id)}
+                      className="opacity-0 group-hover:opacity-100 text-lg transition-all cursor-pointer px-1 "
+                      style={{
+                        color: tarea.completada
+                          ? "#434d5a"
+                          : PRIORIDADES.find((p) => p.valor === tarea.prioridad)
+                              ?.color,
+                      }}
+                    >
+                      ✕
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              {mensajeVictoria && (
+                <div
+                  className="absolute top-5 left-1/2 -translate-x-1/2 z-40 px-5 py-2.5 rounded-sm border 
+    border-[#D4A017] whitespace-nowrap bg-[#060e18] drop-shadow-[0_0_20px_rgba(212,160,23,0.5)]"
+                  style={{ animation: "fadeInDown 0.3s ease-out" }}
+                >
+                  <p className="text-sm font-bold tracking-widest text-[#D4A017]">
+                    {mensajeVictoria}
+                  </p>
+                </div>
+              )}
+            </>
           )}
         </div>
+        {modalAbandonar && (
+          <ModalAbandonar
+            onClose={() => setModalAbandonar(false)}
+            onConfirm={cancelarSesion}
+          />
+        )}
       </div>
+
       <button
+        onClick={() => setModalAbandonar(true)}
         className="px-4 py-2 rounded-sm uppercase tracking-wide font-bold border border-[#2a5a8a] 
       text-[#a08c50] bg-[#060e18]/80 hover:bg-[#060e18] hover:text-[#D4A017] cursor-pointer transition-all"
       >
