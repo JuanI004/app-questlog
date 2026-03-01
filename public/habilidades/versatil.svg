@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Brújula -->
+  <circle cx="32" cy="32" r="20" fill="#0a1828" stroke="#22c55e" stroke-width="1.5"/>
+  <circle cx="32" cy="32" r="16" fill="#0d1e30" stroke="#17324d" stroke-width="1"/>
+  <!-- Puntos cardinales -->
+  <text x="30" y="18" font-family="Georgia,serif" font-size="7" fill="#22c55e" font-weight="bold">N</text>
+  <text x="30" y="50" font-family="Georgia,serif" font-size="7" fill="#22c55e" opacity="0.6">S</text>
+  <text x="14" y="35" font-family="Georgia,serif" font-size="7" fill="#22c55e" opacity="0.6">O</text>
+  <text x="45" y="35" font-family="Georgia,serif" font-size="7" fill="#22c55e" opacity="0.6">E</text>
+  <!-- Aguja norte (dorada) -->
+  <polygon points="32,20 30,32 32,30 34,32" fill="#D4A017"/>
+  <!-- Aguja sur -->
+  <polygon points="32,44 30,32 32,34 34,32" fill="#2a5a8a"/>
+  <!-- Centro -->
+  <circle cx="32" cy="32" r="2.5" fill="#22c55e" opacity="0.9"/>
+  <!-- Marcas -->
+  <line x1="32" y1="14" x2="32" y2="17" stroke="#22c55e" stroke-width="1" opacity="0.4"/>
+  <line x1="32" y1="47" x2="32" y2="50" stroke="#22c55e" stroke-width="1" opacity="0.4"/>
+  <line x1="14" y1="32" x2="17" y2="32" stroke="#22c55e" stroke-width="1" opacity="0.4"/>
+  <line x1="47" y1="32" x2="50" y2="32" stroke="#22c55e" stroke-width="1" opacity="0.4"/>
+</svg>

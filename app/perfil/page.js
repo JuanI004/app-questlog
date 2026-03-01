@@ -52,7 +52,6 @@ export default function Perfil() {
         .eq("user_id", data.session.user.id)
         .single();
       setPlayer(p);
-      console.log(p);
       setLoading(false);
     });
   }, [router]);

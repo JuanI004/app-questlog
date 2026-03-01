@@ -87,10 +87,12 @@ export default function SesionPage({ params }) {
       const { data, error } = await supabase.rpc("finalizar_sesion", {
         p_sesion_id: id,
       });
-      console.log("data completa:", JSON.stringify(data));
-      console.log("error:", error);
+      if (error) {
+        console.log("Error finalizando sesión:", error.message);
+        return;
+      }
       router.push(
-        `/dashboard?xp=${data.xp_ganado}&monedas=${data.monedas_ganadas}`,
+        `/dashboard?xp=${data.xp_ganado}&monedas=${data.monedas_ganadas}&bonus=${data.racha_bonus}`,
       );
     }
     finalizarSesion();

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Ojo arcano -->
+  <ellipse cx="32" cy="32" rx="20" ry="12" fill="#0a1828" stroke="#2AABB5" stroke-width="1.5"/>
+  <!-- Iris -->
+  <circle cx="32" cy="32" r="8" fill="#17324d" stroke="#2AABB5" stroke-width="1"/>
+  <!-- Pupila -->
+  <circle cx="32" cy="32" r="4" fill="#2AABB5" opacity="0.8"/>
+  <!-- Núcleo -->
+  <circle cx="32" cy="32" r="2" fill="#F0C040" opacity="0.9"/>
+  <!-- Pestañas / rayos -->
+  <line x1="12" y1="32" x2="16" y2="32" stroke="#2AABB5" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="48" y1="32" x2="52" y2="32" stroke="#2AABB5" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="20" y1="20" x2="22" y2="22" stroke="#2AABB5" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="42" y1="42" x2="44" y2="44" stroke="#2AABB5" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="44" y1="20" x2="42" y2="22" stroke="#2AABB5" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="22" y1="42" x2="20" y2="44" stroke="#2AABB5" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Brillo iris -->
+  <circle cx="28" cy="29" r="1.5" fill="white" opacity="0.3"/>
+</svg>

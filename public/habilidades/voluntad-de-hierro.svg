@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Espada vertical -->
+  <line x1="32" y1="8" x2="32" y2="52" stroke="#D4A017" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Guardia -->
+  <line x1="20" y1="24" x2="44" y2="24" stroke="#D4A017" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Pomo -->
+  <rect x="28" y="50" width="8" height="6" rx="1" fill="#D4A017" opacity="0.8"/>
+  <!-- Filo decorativo -->
+  <line x1="32" y1="8" x2="29" y2="20" stroke="#F0C040" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+  <!-- Glow punta -->
+  <circle cx="32" cy="9" r="2" fill="#F0C040" opacity="0.6"/>
+  <!-- Diamantes decorativos -->
+  <rect x="30" y="22" width="4" height="4" fill="#8B6914" transform="rotate(45 32 24)"/>
+  <rect x="30" y="34" width="3" height="3" fill="#D4A017" opacity="0.4" transform="rotate(45 32 36)"/>
+</svg>

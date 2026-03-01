@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Llama principal -->
+  <path d="M32 54 C20 54 14 44 16 34 C18 26 24 22 26 16 C28 22 26 28 30 30 C28 24 32 18 34 10 C38 20 36 28 40 32 C44 36 46 40 44 48 C42 52 38 54 32 54Z" fill="#D4A017" opacity="0.9"/>
+  <!-- Llama interior -->
+  <path d="M32 50 C26 50 22 44 24 38 C26 34 28 32 30 28 C30 34 28 38 32 40 C34 36 34 32 36 26 C38 32 38 38 40 40 C42 42 40 48 36 50 C35 50 33 50 32 50Z" fill="#F0C040" opacity="0.8"/>
+  <!-- Núcleo -->
+  <ellipse cx="32" cy="44" rx="4" ry="5" fill="white" opacity="0.3"/>
+  <!-- Chispas -->
+  <circle cx="24" cy="24" r="1.5" fill="#F0C040" opacity="0.6"/>
+  <circle cx="40" cy="20" r="1" fill="#F0C040" opacity="0.5"/>
+  <circle cx="20" cy="32" r="1" fill="#D4A017" opacity="0.4"/>
+</svg>

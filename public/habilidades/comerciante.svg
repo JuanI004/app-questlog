@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Bolsa de monedas -->
+  <path d="M22 28 C20 22 24 16 32 16 C40 16 44 22 42 28 L44 48 C44 52 40 54 32 54 C24 54 20 52 20 48 Z" fill="#0a1828" stroke="#22c55e" stroke-width="1.5"/>
+  <!-- Nudo bolsa -->
+  <path d="M26 18 C28 14 36 14 38 18" stroke="#22c55e" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <!-- Monedas dentro -->
+  <ellipse cx="32" cy="40" rx="8" ry="5" fill="#17324d" stroke="#D4A017" stroke-width="1" opacity="0.8"/>
+  <ellipse cx="32" cy="38" rx="8" ry="5" fill="#17324d" stroke="#D4A017" stroke-width="1"/>
+  <ellipse cx="32" cy="36" rx="8" ry="5" fill="#1a2f20" stroke="#D4A017" stroke-width="1"/>
+  <!-- Símbolo moneda -->
+  <text x="29" y="39" font-family="Georgia,serif" font-size="8" fill="#D4A017" opacity="0.9">$</text>
+  <!-- Brillo bolsa -->
+  <path d="M24 30 C24 26 28 24 30 24" stroke="white" stroke-width="1" stroke-linecap="round" opacity="0.15"/>
+</svg>

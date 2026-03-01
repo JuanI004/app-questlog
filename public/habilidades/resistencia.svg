@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Escudo -->
+  <path d="M32 10 L50 18 L50 34 C50 44 42 52 32 56 C22 52 14 44 14 34 L14 18 Z" fill="#0a1828" stroke="#D4A017" stroke-width="2"/>
+  <!-- Interior escudo -->
+  <path d="M32 16 L45 22 L45 34 C45 42 39 48 32 51 C25 48 19 42 19 34 L19 22 Z" fill="#17324d" stroke="#2a5a8a" stroke-width="1"/>
+  <!-- Cruz central -->
+  <line x1="32" y1="22" x2="32" y2="46" stroke="#D4A017" stroke-width="2" stroke-linecap="round"/>
+  <line x1="22" y1="32" x2="42" y2="32" stroke="#D4A017" stroke-width="2" stroke-linecap="round"/>
+  <!-- Diamante centro -->
+  <rect x="30" y="30" width="4" height="4" fill="#F0C040" transform="rotate(45 32 32)"/>
+</svg>

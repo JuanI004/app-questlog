@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Espadas cruzadas -->
+  <line x1="14" y1="14" x2="50" y2="50" stroke="#D4A017" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="50" y1="14" x2="14" y2="50" stroke="#D4A017" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Guardias -->
+  <line x1="10" y1="22" x2="22" y2="10" stroke="#F0C040" stroke-width="2" stroke-linecap="round"/>
+  <line x1="42" y1="10" x2="54" y2="22" stroke="#F0C040" stroke-width="2" stroke-linecap="round"/>
+  <!-- Pomos -->
+  <circle cx="12" cy="52" r="3" fill="#8B6914" stroke="#D4A017" stroke-width="1"/>
+  <circle cx="52" cy="52" r="3" fill="#8B6914" stroke="#D4A017" stroke-width="1"/>
+  <!-- Diamante central -->
+  <rect x="29" y="29" width="6" height="6" fill="#F0C040" stroke="#D4A017" stroke-width="1" transform="rotate(45 32 32)"/>
+  <!-- Corona -->
+  <path d="M22 10 L26 16 L32 10 L38 16 L42 10 L44 18 L20 18 Z" fill="#D4A017" opacity="0.9"/>
+</svg>

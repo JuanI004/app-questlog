@@ -28,7 +28,6 @@ export default function SectionOne({ handleNextSection, session }) {
       .upload(fileName, file);
 
     if (error) {
-      console.log("Error uploading image:", error.message);
       throw error;
     }
 

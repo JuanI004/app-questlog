@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import xpIcon from "@/public/xp-icon.svg";
 import monedasIcon from "@/public/monedas-icon.svg";
 
-export default function ModalRecompensas({ xp, monedas, onConfirm }) {
+export default function ModalRecompensas({ xp, monedas, onConfirm, bonus }) {
   const [visible, setVisible] = useState(false);
   const [xpVisible, setXpVisible] = useState(false);
   const [monedasVisible, setMonedasVisible] = useState(false);
@@ -20,7 +20,7 @@ export default function ModalRecompensas({ xp, monedas, onConfirm }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
       <div
-        className="flex flex-col gap-2 w-full max-w-sm h-xl mx-4"
+        className="flex flex-col gap-2 w-full max-w-md h-xl mx-4"
         style={{
           boxShadow: "0 0 40px rgba(0,0,0,0.8)",
           opacity: visible ? 1 : 0,
@@ -65,10 +65,18 @@ export default function ModalRecompensas({ xp, monedas, onConfirm }) {
 
           <div className="flex-col  text-slate-400 text-xs uppercase tracking-[4px]">
             <p>Experiencia Ganada</p>
+
             <h2 className="title text-[2rem] text-[#2AABB5] drop-shadow-[0_0_14px_rgba(42,171,181,0.7)]">
               <span className="text-[2rem]">+{xp}</span>{" "}
               <span className="text-lg">XP</span>
             </h2>
+            {bonus === "true" && (
+              <div className="flex flex-col items-center">
+                <p className="text-[#f15c05] text-center">
+                  Racha de 7 dias: <span className="text-lg">×2</span>{" "}
+                </p>
+              </div>
+            )}
           </div>
         </div>
         <div
@@ -84,10 +92,18 @@ export default function ModalRecompensas({ xp, monedas, onConfirm }) {
 
           <div className="flex-col  text-slate-400 text-xs uppercase tracking-[4px]">
             <p>Monedas Ganadas</p>
+
             <h2 className="title  text-[#D4A017] drop-shadow-[0_0_14px_rgba(212,160,23,0.7)]">
               <span className="text-[2rem]">+{monedas}</span>{" "}
               <span className="text-lg">Monedas</span>
             </h2>
+            {bonus === "true" && (
+              <div className="flex flex-col items-center">
+                <p className="text-[#f15c05] text-center">
+                  Racha de 7 dias: <span className="text-lg">×2</span>{" "}
+                </p>
+              </div>
+            )}
           </div>
         </div>
         <button
