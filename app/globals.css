@@ -36,3 +36,81 @@ body {
     opacity: 0;
   }
 }
+@keyframes giro {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes pulso {
+  0%,
+  100% {
+    box-shadow: 0 0 8px var(--glow-color);
+  }
+  50% {
+    box-shadow:
+      0 0 28px var(--glow-color),
+      0 0 50px var(--glow-color);
+  }
+}
+@keyframes flotar {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+@keyframes particula-fuego {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-40px) scale(0);
+    opacity: 0;
+  }
+}
+@keyframes orbitar {
+  0% {
+    transform: rotate(0deg) translateX(var(--radio)) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(var(--radio)) rotate(-360deg);
+  }
+}
+@keyframes parpadeo {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(0.6);
+  }
+}
+@keyframes abismo {
+  0%,
+  100% {
+    box-shadow:
+      0 0 10px rgba(124, 58, 237, 0.4),
+      inset 0 0 10px rgba(124, 58, 237, 0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 30px rgba(124, 58, 237, 0.9),
+      inset 0 0 20px rgba(124, 58, 237, 0.3);
+  }
+}
+@keyframes campeon-sweep {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}

@@ -34,7 +34,7 @@ export default function PestañaHabilidades({
             className="relative flex flex-col gap-2 items-center"
           >
             <div
-              className=" p-2 border max-w-[58px] border-[#234b72] rounded-sm cursor-pointer"
+              className=" p-2 border max-w-14.5 border-[#234b72] rounded-sm cursor-pointer"
               onMouseEnter={() => setHoveredHabilidad(habilidad.id)}
               onMouseLeave={() => setHoveredHabilidad(null)}
               onClick={() => {

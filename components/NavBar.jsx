@@ -50,7 +50,16 @@ export default function NavBar() {
       { label: "Crear Cuenta", href: "/crear-cuenta" },
     ];
   }
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setOpen(false);
+      }
+    };
 
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   return (
     <>
       <nav

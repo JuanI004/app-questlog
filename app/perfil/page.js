@@ -11,6 +11,7 @@ import rachaIcon from "@/public/racha-icon.svg";
 import monedasIcon from "@/public/monedas-icon.svg";
 
 import Image from "next/image";
+import MarcoPreview from "@/components/MarcoPreview";
 
 function getTitulo(nivel) {
   if (nivel >= 50)
@@ -29,7 +30,14 @@ export default function Perfil() {
   const [session, setSession] = useState(null);
   const [player, setPlayer] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [itemsEquipados, setItemsEquipados] = useState({});
   const router = useRouter();
+
+  const marcoEquipado = itemsEquipados.marco;
+  const tituloEquipado = itemsEquipados.titulo;
+  const fondoEquipado = itemsEquipados.fondo;
+  const mascotaEquipada = itemsEquipados.mascota;
+
   const { titulo, color } = getTitulo(player?.nivel ?? 1);
   const xp = player?.xp ?? 0;
   const xpBase = (player?.nivel ?? 1) * 100;
@@ -52,6 +60,16 @@ export default function Perfil() {
         .eq("user_id", data.session.user.id)
         .single();
       setPlayer(p);
+      const { data: equipados } = await supabase
+        .from("player_items")
+        .select("*, tienda_items(*)")
+        .eq("user_id", data.session.user.id)
+        .eq("equipado", true);
+      const porCategoria = {};
+      equipados?.forEach((e) => {
+        porCategoria[e.tienda_items.categoria] = e.tienda_items;
+      });
+      setItemsEquipados(porCategoria);
       setLoading(false);
     });
   }, [router]);
@@ -102,75 +120,129 @@ export default function Perfil() {
           <span className="w-3 h-3 bg-[#2AABB5] rotate-45" />
           <span className="w-2 h-2 bg-[#D4A017] rotate-45" />
         </div>
-        <div className="flex flex-col md:flex-row  items-center p-10 gap-10">
-          <div className="relative shrink-0 h-60 w-60 border-3 border-[#3977b6] rounded-full  drop-shadow-[0_0_20px_rgba(95,153,245,0.4)]">
-            {player?.image_url ? (
-              <Image
-                src={player.image_url}
-                alt="Avatar"
-                width={260}
-                height={260}
-                className="w-full h-full object-cover  rounded-full"
-              />
-            ) : (
-              <Image
-                src={placeholderImg}
-                alt="Avatar"
-                width={260}
-                height={260}
-                className="w-full h-full object-cover"
-              />
-            )}
-            <span
-              className="title absolute bg-[#060e18] px-3  h-10 flex items-center justify-center
+        <div className="relative">
+          {fondoEquipado?.datos?.url && (
+            <Image
+              src={fondoEquipado.datos.url}
+              alt="Fondo Equipado"
+              width={1600}
+              height={1600}
+              className="absolute inset-0 w-full h-45 object-cover -z-10"
+            />
+          )}
+          <div className="p-10 pt-35 flex flex-col md:flex-row  items-center  gap-10">
+            {marcoEquipado ? (
+              <MarcoPreview item={marcoEquipado} size={65} sizePx={260}>
+                <div className="relative shrink-0 h-65 w-65  rounded-full ">
+                  {player?.image_url ? (
+                    <Image
+                      src={player.image_url}
+                      alt="Avatar"
+                      width={260}
+                      height={260}
+                      className="w-full h-full object-cover  rounded-full"
+                    />
+                  ) : (
+                    <Image
+                      src={placeholderImg}
+                      alt="Avatar"
+                      width={260}
+                      height={260}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
+                  {mascotaEquipada?.datos?.sprite && (
+                    <Image
+                      src={mascotaEquipada?.datos?.sprite}
+                      alt="Mascota Equipado"
+                      width={260}
+                      height={260}
+                      className="absolute -bottom-5 -left-7 w-40 h-40 object-cover z-10"
+                      style={{
+                        animation:
+                          mascotaEquipada.datos.animacion === "flotar" ||
+                          mascotaEquipada.datos.animacion === "flotar_lento"
+                            ? `flotar ${mascotaEquipada.datos.animacion === "flotar_lento" ? "4s" : "2.5s"} ease-in-out infinite`
+                            : "none",
+                      }}
+                    />
+                  )}
+                  <span
+                    className="title absolute bg-[#060e18] px-3  h-10 flex items-center justify-center
              text-[#F0C040] rounded-sm border-2 border-[#D4A017] 
-             bottom-2 right-2 "
-            >
-              LVL {player?.nivel}
-            </span>
-          </div>
-          <div className="flex flex-col items-center md:items-start gap-2 w-full ">
-            <div
-              className="flex items-center uppercase tracking-[4px] gap-4 text-xl"
-              style={
-                titulo !== "Leyenda Académica"
-                  ? { color }
-                  : {
-                      color: "#f5eedc",
-                      backgroundImage:
-                        "linear-gradient(45deg, #f5eedc , #ebddc6 25%, #d4bf9f 50%, #a68c6c 75%, #755f3f 100%)",
-                      backgroundClip: "text",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                    }
-              }
-            >
-              <span className="w-2 h-2 bg-[#D4A017] rotate-45" />
-              {titulo}
-              <span className="w-2 h-2 bg-[#D4A017] rotate-45" />
-            </div>
-            <h2 className="title text-[2.5rem] text-[#F0C040] mt-6 md:mt-0 drop-shadow-[0_0_20px_rgba(212,160,23,0.5)]">
-              {player?.username || "Aventurero sin nombre"}
-            </h2>
-            <h3 className="text-xl uppercase tracking-[4px] text-[#F0C040] mt-2">
-              {player?.arquetipo || "Arquetipo desconocido"}
-            </h3>
-            <div className="flex justify-between items-center mt-3 w-full">
-              <p className="text-[#2a5a8a] text-bold uppercase tracking-[4px] text-lg ">
-                Experiencia
-              </p>
-              <p className="text-slate-500  tracking-widest">
-                {player?.xp || 0}/{xpBase} XP
-              </p>
-            </div>
-            <div className="w-full h-3 bg-[#060e18] rounded-full border border-[#2a5a8a] overflow-hidden mb-2">
+             bottom-2 right-2 z-10"
+                  >
+                    LVL {player?.nivel}
+                  </span>
+                </div>
+              </MarcoPreview>
+            ) : null}
+
+            <div className="md:mt-12 flex flex-col items-center md:items-start gap-2 w-full ">
               <div
-                className="h-full rounded-full transition-all duration-1000"
-                style={{
-                  width: `${porcentaje}%`,
-                  background: `linear-gradient(90deg,rgba(6, 0, 97, 1) 0%, rgba(9, 9, 121, 1) 0%, rgba(0, 212, 255, 1) 100%)`,
-                }}
-              />
+                className="flex items-center uppercase tracking-[4px] gap-4 text-xl"
+                style={
+                  titulo !== "Leyenda Académica"
+                    ? { color }
+                    : {
+                        color: "#f5eedc",
+                        backgroundImage:
+                          "linear-gradient(45deg, #f5eedc , #ebddc6 25%, #d4bf9f 50%, #a68c6c 75%, #755f3f 100%)",
+                        backgroundClip: "text",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                      }
+                }
+              >
+                <span className="w-2 h-2 bg-[#D4A017] rotate-45" />
+                {titulo}
+                <span className="w-2 h-2 bg-[#D4A017] rotate-45" />
+              </div>
+              <div className="flex flex-col justify-center items-center md:items-start gap-3">
+                <h2 className="title text-[2.5rem] text-[#F0C040] mt-0 drop-shadow-[0_0_20px_rgba(212,160,23,0.5)]">
+                  {player?.username || "Aventurero sin nombre"}
+                </h2>
+                {tituloEquipado && (
+                  <div className=" flex items-center justify-center rounded-sm">
+                    <div
+                      className="relative px-2 py-2 flex items-center gap-2 border border-[#1e3a5a] rounded-sm text-center "
+                      style={{
+                        background:
+                          "linear-gradient(135deg, #0d1e30, #0a1828, #0d1e30)",
+                        boxShadow:
+                          "0 0 12px rgba(42,90,138,0.4), inset 0 1px 0 rgba(57,119,182,0.15)",
+                      }}
+                    >
+                      <span className="shrink-0 w-2 h-2 rotate-45 inline-block bg-[#D4A017] shadow-[0_0_6px_rgba(212,160,23,0.7)]" />
+                      <p className=" text-[0.65rem] font-black uppercase tracking-[3px] text-center text-[#D4A017] text-shadow-[0_0_6px_rgba(212,160,23,0.5)]">
+                        {tituloEquipado.datos?.texto}
+                      </p>
+                      <span className="shrink-0 w-2 h-2 rotate-45 inline-block bg-[#D4A017] shadow-[0_0_6px_rgba(212,160,23,0.7)]" />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <h3 className="text-xl uppercase tracking-[4px] text-[#F0C040] mt-2">
+                {player?.arquetipo || "Arquetipo desconocido"}
+              </h3>
+              <div className="flex justify-between items-center mt-3 w-full">
+                <p className="text-[#2a5a8a] text-bold uppercase tracking-[4px] text-lg ">
+                  Experiencia
+                </p>
+                <p className="text-slate-500  tracking-widest">
+                  {player?.xp || 0}/{xpBase} XP
+                </p>
+              </div>
+              <div className="w-full h-3 bg-[#060e18] rounded-full border border-[#2a5a8a] overflow-hidden mb-2">
+                <div
+                  className="h-full rounded-full transition-all duration-1000"
+                  style={{
+                    width: `${porcentaje}%`,
+                    background: `linear-gradient(90deg,rgba(6, 0, 97, 1) 0%, rgba(9, 9, 121, 1) 0%, rgba(0, 212, 255, 1) 100%)`,
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
