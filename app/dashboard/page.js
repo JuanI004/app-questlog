@@ -10,11 +10,13 @@ import placeholderImg from "@/public/placeholder.webp";
 import ModalRecompensas from "@/components/ModalRecompensas";
 import ArbolHabilidades from "@/components/ArbolHabilidades";
 import Tienda from "@/components/Tienda";
+import Flashcards from "@/components/Flashcards";
 
 const SECTIONS = {
   1: "Estudiar",
   2: "Habilidades",
   3: "Tienda",
+  4: "Flashcards",
 };
 
 export default function Dashboard() {
@@ -92,7 +94,7 @@ export default function Dashboard() {
         </div>
       </div>
       <div
-        className="grid grid-cols-1 sm:grid-cols-3   max-h-250 w-7/8 lg:w-5/8 bg-linear-to-br from-[#0d1e30] via-[#0a1828] to-[#060e18]
+        className="grid grid-cols-1 sm:grid-cols-4   max-h-250 w-7/8 lg:w-5/8 bg-linear-to-br from-[#0d1e30] via-[#0a1828] to-[#060e18]
                       rounded-sm border border-[#2a5a8a]  "
       >
         {Object.entries(SECTIONS).map(([key, value]) => (
@@ -117,6 +119,7 @@ export default function Dashboard() {
         {section === "1" && <Estudiar session={session} />}
         {section === "2" && <ArbolHabilidades session={session} />}
         {section === "3" && <Tienda />}
+        {section === "4" && <Flashcards session={session} />}
       </div>
     </>
   );

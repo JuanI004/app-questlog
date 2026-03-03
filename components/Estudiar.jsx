@@ -264,7 +264,7 @@ export default function Estudiar({ session }) {
                 active:translate-y-0.5 active:border-b-2
                 transition-all duration-200 cursor-pointer"
         >
-          Comenzar
+          ⚔ Comenzar Batalla
         </button>
       </form>
     </div>
