@@ -66,7 +66,7 @@ export default function Trivia({
       setTimeout(() => {
         setRespuestaSeleccionada();
         if (preguntaActual === preguntas.length - 1) {
-          handleFinalizarTrivia();
+          handleFinalizarTrivia(xp, monedas, preguntasCorrectas.length);
           return;
         }
         setPreguntaActual((prev) => prev + 1);

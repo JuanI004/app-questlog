@@ -4,7 +4,12 @@ import { useEffect, useState } from "react";
 import xpIcon from "@/public/xp-icon.svg";
 import monedasIcon from "@/public/monedas-icon.svg";
 
-export default function ModalRecompensas({ xp, monedas, onConfirm, bonus }) {
+export default function ModalRecompensas({
+  xp,
+  monedas,
+  onConfirm,
+  bonus = false,
+}) {
   const [visible, setVisible] = useState(false);
   const [xpVisible, setXpVisible] = useState(false);
   const [monedasVisible, setMonedasVisible] = useState(false);
