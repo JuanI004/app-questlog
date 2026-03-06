@@ -53,12 +53,13 @@ const RAREZAS = {
 };
 
 export default function Tienda() {
-  const { setPlayer } = useDashboard();
+  const { setPlayer, session } = useDashboard();
   const [pestaña, setPestaña] = useState("titulo");
   const [filtroRareza, setFiltroRareza] = useState("todas");
   const [items, setItems] = useState([]);
   const [itemsComprados, setItemsComprados] = useState([]);
   const [mensaje, setMensaje] = useState(null);
+  const [tieneComerciante, setTieneComerciante] = useState(false);
   useEffect(() => {
     if (mensaje) {
       const timer = setTimeout(() => {
@@ -80,6 +81,15 @@ export default function Tienda() {
       }
       setItems(data);
     }
+    async function fetchHabilidades() {
+      const { data } = await supabase
+        .from("player_habilidades")
+        .select("habilidades(nombre)")
+        .eq("user_id", session.user.id);
+      setTieneComerciante(
+        data?.some((h) => h.habilidades.nombre === "Comerciante") ?? false,
+      );
+    }
     async function fetchItemsComprados() {
       const { data, error } = await supabase.from("player_items").select("*");
       if (error) {
@@ -88,6 +98,7 @@ export default function Tienda() {
       }
       setItemsComprados(data);
     }
+    fetchHabilidades();
     fetchItems();
     fetchItemsComprados();
   }, []);
@@ -105,7 +116,11 @@ export default function Tienda() {
       ...prev,
       { item_id: item.id, equipado: false },
     ]);
-    setPlayer((prev) => ({ ...prev, monedas: prev.monedas - item.precio }));
+    let precio = item.precio;
+    if (tieneComerciante) {
+      precio = Math.floor(precio * 0.9);
+    }
+    setPlayer((prev) => ({ ...prev, monedas: prev.monedas - precio }));
     return;
   };
   const handleEquipar = async function (item) {
@@ -202,6 +217,7 @@ export default function Tienda() {
         mensaje={mensaje}
         handleComprar={handleComprar}
         handleEquipar={handleEquipar}
+        tieneComerciante={tieneComerciante}
       />
     </div>
   );

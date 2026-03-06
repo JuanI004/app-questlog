@@ -11,6 +11,7 @@ export default function Trivia({
   categoriaNombre,
   colorDificultad,
   handleFinalizarTrivia,
+  usosRestantes,
 }) {
   const [preguntas, setPreguntas] = useState([]);
   const [preguntaActual, setPreguntaActual] = useState(0);
@@ -127,15 +128,22 @@ export default function Trivia({
             ))}
           </div>
         </div>
-        <div className=" text-md font-medium items-center flex justify-center gap-4">
-          <p className="flex gap-2 text-[#2AABB5] font-bold">
-            <Image src={xpIcon} alt="XP" width={20} height={20} /> +{xp}{" "}
-          </p>
 
-          <div className="flex gap-2 text-[#D4A017] font-bold">
-            <Image src={monedasIcon} alt="Monedas" width={20} height={20} /> +
-            {monedas}
-          </div>
+        <div className=" text-md font-medium items-center flex justify-center gap-4">
+          {usosRestantes > 0 && (
+            <>
+              <p className="flex gap-2 text-[#2AABB5] font-bold">
+                <Image src={xpIcon} alt="XP" width={20} height={20} /> +
+                {xp}{" "}
+              </p>
+
+              <div className="flex gap-2 text-[#D4A017] font-bold">
+                <Image src={monedasIcon} alt="Monedas" width={20} height={20} />{" "}
+                +{monedas}
+              </div>
+            </>
+          )}
+
           <p
             onClick={() => window.location.reload()}
             className="uppercase text-slate-400 tracking-widest cursor-pointer hover:text-slate-700"

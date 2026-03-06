@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useDashboard } from "../../layout";
 
 const PRIORIDADES = [
   {
@@ -47,6 +48,7 @@ const MENSAJES_VICTORIA = [
 ];
 
 export default function SesionPage({ params }) {
+  const { session, player } = useDashboard();
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const [sesion, setSesion] = useState(null);
@@ -61,11 +63,23 @@ export default function SesionPage({ params }) {
   const [mensajeVictoria, setMensajeVictoria] = useState("");
   const [modalAbandonar, setModalAbandonar] = useState(false);
   const [sesionTerminada, setSesionTerminada] = useState(false);
+  const [tieneZona, setTieneZona] = useState(false);
   const timerColor = fase === "descanso" ? "#2AABB5" : "#D4A017";
   const timerColorRgb = fase === "descanso" ? "42,171,181" : "212,160,23";
   let tareasHechas = tareas.filter((t) => t.completada).length;
 
   useEffect(() => {
+    async function fetchHabilidades() {
+      const { data: habilidades } = await supabase
+        .from("player_habilidades")
+        .select("habilidades(nombre)")
+        .eq("user_id", session.user.id);
+
+      const tieneZona = habilidades?.some(
+        (h) => h.habilidades.nombre === "Zona de Confort",
+      );
+      setTieneZona(tieneZona);
+    }
     supabase
       .from("sesiones")
       .select("*")
@@ -80,6 +94,7 @@ export default function SesionPage({ params }) {
         setSegundos(data.estudio_min * 60);
         setLoading(false);
       });
+    fetchHabilidades();
   }, [id, router]);
   useEffect(() => {
     if (!sesionTerminada) return;
@@ -92,7 +107,7 @@ export default function SesionPage({ params }) {
         return;
       }
       router.push(
-        `/dashboard?xp=${data.xp_ganado}&monedas=${data.monedas_ganadas}&bonus=${data.racha_bonus}`,
+        `/dashboard?xp=${data.xp_ganado}&monedas=${data.monedas_ganadas}&bonus=${data.racha_bonus}&habilidades=${encodeURIComponent(JSON.stringify(data.bonus_aplicados))}`,
       );
     }
     finalizarSesion();
@@ -344,10 +359,11 @@ export default function SesionPage({ params }) {
                 placeholder="Nueva tarea..."
               />
               <button
+                disabled={fase === "descanso" && !tieneZona}
                 onClick={() => {
                   if (
                     nuevaTarea.trim() === "" ||
-                    fase === "descanso" ||
+                    (fase === "descanso" && !tieneZona) ||
                     prioridad === undefined
                   )
                     return;

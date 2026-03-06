@@ -103,7 +103,7 @@ export default function PestañaHabilidades({
                         fontWeight: "bold",
                       }}
                     >
-                      {habilidad.nivel_requerido}
+                      {habilidad.costo_monedas}
                     </span>{" "}
                     Monedas
                   </p>
@@ -145,25 +145,27 @@ export default function PestañaHabilidades({
           <p className="text-xs text-slate-400">Bloqueada</p>
         </div>
       </div>
-      {habilidadSeleccionada && habilidadDispoible(habilidadSeleccionada) && (
-        <button
-          onClick={() => handleDesbloquear(habilidadSeleccionada)}
-          className="
+      {habilidadSeleccionada &&
+        habilidadDispoible(habilidadSeleccionada) &&
+        !tieneHabilidad(habilidadSeleccionada) && (
+          <button
+            onClick={() => handleDesbloquear(habilidadSeleccionada)}
+            className="
                 mt-6 text-xl font-bold tracking-widest uppercase text-[#0a1828]
                 bg-linear-to-b from-[#F0C040] to-[#D4A017] border-b-4 border-[#8B6914]
                 px-10 py-5 rounded-sm shadow-[0_0_30px_rgba(212,160,23,0.3)]
                 hover:shadow-[0_0_40px_rgba(212,160,23,0.5)] hover:-translate-y-0.5
                 active:translate-y-0.5 active:border-b-2
                 transition-all duration-200 cursor-pointer"
-        >
-          Desbloquear <br />
-          <span className="text-xs">
-            {"("}
-            {habilidades.find((h) => h.id === habilidadSeleccionada)?.nombre}
-            {")"}
-          </span>
-        </button>
-      )}
+          >
+            Desbloquear <br />
+            <span className="text-xs">
+              {"("}
+              {habilidades.find((h) => h.id === habilidadSeleccionada)?.nombre}
+              {")"}
+            </span>
+          </button>
+        )}
     </div>
   );
 }

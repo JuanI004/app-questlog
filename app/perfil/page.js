@@ -39,10 +39,13 @@ export default function Perfil() {
   const mascotaEquipada = itemsEquipados.mascota;
 
   const { titulo, color } = getTitulo(player?.nivel ?? 1);
+  const nivel = player?.nivel ?? 1;
   const xp = player?.xp ?? 0;
-  const xpBase = (player?.nivel ?? 1) * 100;
-  const xpActual = xp % xpBase;
-  const porcentaje = Math.min((xpActual / xpBase) * 100, 100);
+  const xpParaNivelActual = (nivel - 1) ** 2 * 50;
+  const xpParaSiguienteNivel = nivel ** 2 * 50;
+  const xpEnNivelActual = xp - xpParaNivelActual;
+  const xpNecesario = xpParaSiguienteNivel - xpParaNivelActual;
+  const porcentaje = Math.min((xpEnNivelActual / xpNecesario) * 100, 100);
   const niveles = [5, 10, 20, 30, 50];
   const proximo = niveles.find((n) => n > (player?.nivel ?? 1)) || "—";
   const { titulo: proximoTitulo, color: proximoColor } = getTitulo(proximo);
@@ -231,7 +234,7 @@ export default function Perfil() {
                   Experiencia
                 </p>
                 <p className="text-slate-500  tracking-widest">
-                  {player?.xp || 0}/{xpBase} XP
+                  {player?.xp || 0}/{xpParaSiguienteNivel} XP
                 </p>
               </div>
               <div className="w-full h-3 bg-[#060e18] rounded-full border border-[#2a5a8a] overflow-hidden mb-2">
@@ -318,40 +321,36 @@ export default function Perfil() {
             </p>
           </>
         ) : (
-          <>
-            <div className="w-7/8 lg:w-6/8  bg-[#060e18]/95 border border-[#2a5a8a]  hover:border-[#F0C040]/40 py-8 px-7 rounded-sm">
-              <div className="flex flex-col items-center gap-3 py-4">
-                <div className="flex items-center gap-3">
-                  <span className="w-2 h-2 bg-[#D4A017] rotate-45" />
-                  <span className="w-3 h-3 bg-[#F0C040] rotate-45" />
-                  <span className="w-2 h-2 bg-[#D4A017] rotate-45" />
-                </div>
-                <h2
-                  className="title text-[2rem] tracking-widest text-center"
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(45deg, #f5eedc, #ebddc6 25%, #d4bf9f 50%, #a68c6c 75%, #755f3f 100%)",
-                    backgroundClip: "text",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  }}
-                >
-                  Leyenda Académica
-                </h2>
-                <p className="text-[#a08c50] text-lg uppercase tracking-[4px] text-center">
-                  Has alcanzado el título máximo
-                </p>
-                <p className="text-slate-500 text-md text-center max-w-xs">
-                  No hay más títulos por conquistar.
-                </p>
-                <div className="flex items-center gap-3 mt-1">
-                  <span className="h-px w-12 bg-linear-to-r from-transparent to-[#D4A017]/60" />
-                  <span className="w-2 h-2 bg-[#D4A017] rotate-45" />
-                  <span className="h-px w-12 bg-linear-to-l from-transparent to-[#D4A017]/60" />
-                </div>
-              </div>
+          <div className="flex flex-col items-center gap-3 py-4">
+            <div className="flex items-center gap-3">
+              <span className="w-2 h-2 bg-[#D4A017] rotate-45" />
+              <span className="w-3 h-3 bg-[#F0C040] rotate-45" />
+              <span className="w-2 h-2 bg-[#D4A017] rotate-45" />
             </div>
-          </>
+            <h2
+              className="title text-[2rem] tracking-widest text-center"
+              style={{
+                backgroundImage:
+                  "linear-gradient(45deg, #f5eedc, #ebddc6 25%, #d4bf9f 50%, #a68c6c 75%, #755f3f 100%)",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Leyenda Académica
+            </h2>
+            <p className="text-[#a08c50] text-lg uppercase tracking-[4px] text-center">
+              Has alcanzado el título máximo
+            </p>
+            <p className="text-slate-500 text-md text-center max-w-xs">
+              No hay más títulos por conquistar.
+            </p>
+            <div className="flex items-center gap-3 mt-1">
+              <span className="h-px w-12 bg-linear-to-r from-transparent to-[#D4A017]/60" />
+              <span className="w-2 h-2 bg-[#D4A017] rotate-45" />
+              <span className="h-px w-12 bg-linear-to-l from-transparent to-[#D4A017]/60" />
+            </div>
+          </div>
         )}
       </div>
     </div>

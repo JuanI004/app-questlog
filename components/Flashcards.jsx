@@ -89,12 +89,21 @@ export default function Flashcards({ session }) {
         setErrores({ error: error.message });
         return;
       }
+      const { data: habilidades } = await supabase
+        .from("player_habilidades")
+        .select("habilidades(nombre)")
+        .eq("user_id", session.user.id);
+
+      const tieneVersatil = habilidades?.some(
+        (h) => h.habilidades.nombre === "Versátil",
+      );
+      const limiteFlashcards = tieneVersatil ? 4 : 3;
       const usosHoy =
         data?.flashcards_fecha === new Date().toISOString().split("T")[0]
           ? data.flashcards_hoy
           : 0;
-      setUsosRestantes(Math.max(0, 3 - usosHoy));
-      console.log("Usos restantes:", Math.max(0, 3 - usosHoy));
+      setUsosRestantes(Math.max(0, limiteFlashcards - usosHoy));
+      console.log("Usos restantes:", Math.max(0, limiteFlashcards - usosHoy));
     };
     fetchUsos();
   }, [session.user.id]);
@@ -117,12 +126,13 @@ export default function Flashcards({ session }) {
     setPlayer((prev) => ({
       ...prev,
       xp: prev.xp + recompensas.xp,
-      monedas: prev.monedas + monedas,
+      monedas: prev.monedas + recompensas.monedas,
     }));
+    setRecompensas({ xp: 0, monedas: 0, correctas: 0 });
   }
   return !triviaIniciada ? (
     <>
-      {recompensas.xp > 0 && recompensas.monedas > 0 && (
+      {recompensas.xp > 0 && recompensas.monedas > 0 && usosRestantes > 0 && (
         <ModalRecompensas
           xp={recompensas.xp}
           monedas={recompensas.monedas}
@@ -139,12 +149,7 @@ export default function Flashcards({ session }) {
         <p className="bg-[#ef44442f] p-2 text-sm rounded-sm border text-center border-[#ef4444] text-[#ef4444]">
           AVISO: Las preguntas solo están disponibles en inglés
         </p>
-        {usosRestantes === 0 && (
-          <p className="bg-[#ef44442f] p-2 text-sm rounded-sm border text-center border-[#ef4444] text-[#ef4444]">
-            Superaste el límite diario. A partir de este punto no recibirás
-            recompensas, pero puedes seguir jugando por diversión
-          </p>
-        )}
+
         <div className="flex flex-col items-start w-full px-4 mt-4 gap-3">
           <p className="uppercase tracking-[4px] pl-1 text-[#a08c50] text-xl text-left">
             Dificultad
@@ -232,19 +237,32 @@ export default function Flashcards({ session }) {
                 {CATEGORIAS.find((c) => c.id === categoriaId)?.label}
               </p>
             </div>
-            <div className="flex gap-2 items-center">
-              <p className="text-slate-400">Hasta</p>
-              <p className="flex gap-2 text-[#2AABB5] font-bold">
-                +{getRecompensaForDifficulty(pestaña).xp * 10}{" "}
-                <Image src={xpIcon} alt="XP" width={20} height={20} />{" "}
-              </p>
-              <span className="text-slate-400">·</span>
-              <p className="flex gap-2 text-[#D4A017] font-bold">
-                +{getRecompensaForDifficulty(pestaña).monedas * 10}{" "}
-                <Image src={monedasIcon} alt="Monedas" width={20} height={20} />
-              </p>
-            </div>
+            {usosRestantes > 0 && (
+              <div className="flex gap-2 items-center">
+                <p className="text-slate-400">Hasta</p>
+                <p className="flex gap-2 text-[#2AABB5] font-bold">
+                  +{getRecompensaForDifficulty(pestaña).xp * 10}{" "}
+                  <Image src={xpIcon} alt="XP" width={20} height={20} />{" "}
+                </p>
+                <span className="text-slate-400">·</span>
+                <p className="flex gap-2 text-[#D4A017] font-bold">
+                  +{getRecompensaForDifficulty(pestaña).monedas * 10}{" "}
+                  <Image
+                    src={monedasIcon}
+                    alt="Monedas"
+                    width={20}
+                    height={20}
+                  />
+                </p>
+              </div>
+            )}
           </div>
+          {usosRestantes === 0 && (
+            <p className="bg-[#d49e1723] mx-auto p-2 text-sm rounded-sm border text-center border-[#D4A017] text-[#D4A017]">
+              Superaste el límite diario. A partir de este punto no recibirás
+              recompensas, pero puedes seguir jugando por diversión
+            </p>
+          )}
           <button
             onClick={() => setTriviaIniciada(true)}
             className="w-full
@@ -272,6 +290,7 @@ export default function Flashcards({ session }) {
       dificultad={getValoresForDifficulty(pestaña)}
       colorDificultad={getColorForDifficulty(pestaña)}
       handleFinalizarTrivia={handleFinalizarTrivia}
+      usosRestantes={usosRestantes}
     />
   );
 }

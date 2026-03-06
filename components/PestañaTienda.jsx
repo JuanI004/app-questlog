@@ -15,6 +15,7 @@ export default function PestañaTienda({
   mensaje,
   handleComprar,
   handleEquipar,
+  tieneComerciante,
 }) {
   function itemComprado(item) {
     return itemsComprados.some((comprado) => comprado.item_id === item.id);
@@ -139,7 +140,16 @@ export default function PestañaTienda({
             {!itemComprado(item) && (
               <>
                 <Image src={monedasIcon} alt="Monedas" width={16} height={16} />
-                {item.precio}
+                {tieneComerciante ? (
+                  <div className="flex items-center gap-1">
+                    <span className="line-through text-slate-500 text-xs">
+                      {item.precio}
+                    </span>
+                    <span>{Math.round(item.precio * 0.9)}</span>
+                  </div>
+                ) : (
+                  item.precio
+                )}
               </>
             )}
           </div>

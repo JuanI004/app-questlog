@@ -9,6 +9,7 @@ export default function ModalRecompensas({
   monedas,
   onConfirm,
   bonus = false,
+  bonusHabilidades = [],
 }) {
   const [visible, setVisible] = useState(false);
   const [xpVisible, setXpVisible] = useState(false);
@@ -27,7 +28,6 @@ export default function ModalRecompensas({
       <div
         className="flex flex-col gap-2 w-full max-w-md h-xl mx-4"
         style={{
-          boxShadow: "0 0 40px rgba(0,0,0,0.8)",
           opacity: visible ? 1 : 0,
           transform: visible
             ? "translateY(0) scale(1)"
@@ -75,13 +75,6 @@ export default function ModalRecompensas({
               <span className="text-[2rem]">+{xp}</span>{" "}
               <span className="text-lg">XP</span>
             </h2>
-            {bonus === "true" && (
-              <div className="flex flex-col items-center">
-                <p className="text-[#f15c05] text-center">
-                  Racha de 7 dias: <span className="text-lg">×2</span>{" "}
-                </p>
-              </div>
-            )}
           </div>
         </div>
         <div
@@ -102,15 +95,26 @@ export default function ModalRecompensas({
               <span className="text-[2rem]">+{monedas}</span>{" "}
               <span className="text-lg">Monedas</span>
             </h2>
-            {bonus === "true" && (
-              <div className="flex flex-col items-center">
-                <p className="text-[#f15c05] text-center">
-                  Racha de 7 dias: <span className="text-lg">×2</span>{" "}
-                </p>
-              </div>
-            )}
           </div>
         </div>
+        {bonusHabilidades.length > 0 && (
+          <div className="flex flex-col gap-2 w-full mb-5">
+            {bonusHabilidades.map((b, i) => (
+              <div
+                key={i}
+                className="flex items-center gap-3 px-4 py-2 border border-[#1e3a5a] rounded-sm"
+              >
+                <Image src={b.icono} alt={b.habilidad} width={24} height={24} />
+                <div>
+                  <p className="text-xs uppercase tracking-widest text-[#D4A017]">
+                    {b.habilidad}
+                  </p>
+                  <p className="text-xs text-slate-400">{b.descripcion}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
         <button
           className="
                 mb-4  text-xl font-bold tracking-widest uppercase text-[#0a1828]

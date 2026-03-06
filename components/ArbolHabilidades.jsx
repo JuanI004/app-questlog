@@ -83,7 +83,7 @@ export default function ArbolHabilidades({ session }) {
       setError(error);
       return;
     }
-    setDesbloqueadas((prev) => new Set([...prev, habilidadId]));
+    setHabilidadesJugador((prev) => [...prev, { habilidad_id: habilidadId }]);
   }
   return (
     <div className="relative flex flex-col items-center gap-2 p-4 ">
