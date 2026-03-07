@@ -20,36 +20,6 @@ const CATEGORIAS = [
   { id: 27, label: "Animales" },
 ];
 
-const DIFICULTADES = [
-  {
-    valor: "easy",
-    label: "Fácil",
-    color: "#22c55e",
-    glow: "#22c55eaa",
-    bg: "#22c55e33",
-    xp: 1,
-    monedas: 1,
-  },
-  {
-    valor: "medium",
-    label: "Media",
-    color: "#D4A017",
-    glow: "#D4A017aa",
-    bg: "#d49e1728",
-    xp: 5,
-    monedas: 2,
-  },
-  {
-    valor: "hard",
-    label: "Difícil",
-    color: "#ef4444",
-    glow: "#ef4444aa",
-    bg: "#ef44442f",
-    xp: 10,
-    monedas: 3,
-  },
-];
-
 export default function Flashcards({ session }) {
   const { setPlayer } = useDashboard();
   const [pestaña, setPestaña] = useState("Fácil");
@@ -60,6 +30,36 @@ export default function Flashcards({ session }) {
     monedas: 0,
     correctas: 0,
   });
+  const [tieneHabilidades, setTieneHabilidades] = useState({});
+  const DIFICULTADES = [
+    {
+      valor: "easy",
+      label: "Fácil",
+      color: "#22c55e",
+      glow: "#22c55eaa",
+      bg: "#22c55e33",
+      xp: 1,
+      monedas: 1,
+    },
+    {
+      valor: "medium",
+      label: "Media",
+      color: "#D4A017",
+      glow: "#D4A017aa",
+      bg: "#d49e1728",
+      xp: tieneHabilidades.explorador ? 10 : 5,
+      monedas: 2,
+    },
+    {
+      valor: "hard",
+      label: "Difícil",
+      color: "#ef4444",
+      glow: "#ef4444aa",
+      bg: "#ef44442f",
+      xp: 10,
+      monedas: 3,
+    },
+  ];
   const [errores, setErrores] = useState({});
   const [usosRestantes, setUsosRestantes] = useState(3);
   let correctas;
@@ -98,6 +98,14 @@ export default function Flashcards({ session }) {
         (h) => h.habilidades.nombre === "Versátil",
       );
       const limiteFlashcards = tieneVersatil ? 4 : 3;
+      const tieneExplorador = habilidades?.some(
+        (h) => h.habilidades.nombre === "Explorador",
+      );
+      setTieneHabilidades((prev) => ({ ...prev, explorador: tieneExplorador }));
+      const tieneLeyenda = habilidades?.some(
+        (h) => h.habilidades.nombre === "Leyenda Errante",
+      );
+      setTieneHabilidades((prev) => ({ ...prev, leyenda: tieneLeyenda }));
       const usosHoy =
         data?.flashcards_fecha === new Date().toISOString().split("T")[0]
           ? data.flashcards_hoy
@@ -109,7 +117,21 @@ export default function Flashcards({ session }) {
   }, [session.user.id]);
   async function handleFinalizarTrivia(xp, monedas, preguntasCorrectas) {
     setTriviaIniciada(false);
-    setRecompensas({ xp, monedas, correctas: preguntasCorrectas || 0 });
+    if (tieneHabilidades.leyenda && preguntasCorrectas === 10) {
+      setRecompensas({
+        xp: Math.round(xp * 1.5),
+        monedas: Math.round(monedas * 1.5),
+        correctas: preguntasCorrectas || 0,
+        bonusLeyenda: true,
+      });
+    } else {
+      setRecompensas({
+        xp,
+        monedas,
+        correctas: preguntasCorrectas || 0,
+        bonusLeyenda: false,
+      });
+    }
   }
   async function confirmarRecompensas() {
     const { data, error } = await supabase.rpc(
@@ -125,8 +147,8 @@ export default function Flashcards({ session }) {
     }
     setPlayer((prev) => ({
       ...prev,
-      xp: prev.xp + recompensas.xp,
-      monedas: prev.monedas + recompensas.monedas,
+      xp: prev.xp + data.xp_ganado,
+      monedas: prev.monedas + data.monedas_ganadas,
     }));
     setRecompensas({ xp: 0, monedas: 0, correctas: 0 });
   }
@@ -136,6 +158,15 @@ export default function Flashcards({ session }) {
         <ModalRecompensas
           xp={recompensas.xp}
           monedas={recompensas.monedas}
+          bonusHabilidades={
+            recompensas.bonusLeyenda && [
+              {
+                habilidad: "Leyenda Errante",
+                descripcion: "+50% XP y +50% de monedas",
+                icono: "/habilidades/leyenda-errante.svg",
+              },
+            ]
+          }
           onConfirm={confirmarRecompensas}
         />
       )}
@@ -291,6 +322,7 @@ export default function Flashcards({ session }) {
       colorDificultad={getColorForDifficulty(pestaña)}
       handleFinalizarTrivia={handleFinalizarTrivia}
       usosRestantes={usosRestantes}
+      tieneExplorador={tieneHabilidades.explorador}
     />
   );
 }

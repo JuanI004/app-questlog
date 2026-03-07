@@ -12,6 +12,7 @@ export default function Trivia({
   colorDificultad,
   handleFinalizarTrivia,
   usosRestantes,
+  tieneExplorador,
 }) {
   const [preguntas, setPreguntas] = useState([]);
   const [preguntaActual, setPreguntaActual] = useState(0);
@@ -20,9 +21,10 @@ export default function Trivia({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   let xp =
-    preguntasCorrectas.length * { easy: 5, medium: 10, hard: 20 }[dificultad];
+    preguntasCorrectas.length *
+    { easy: 1, medium: tieneExplorador ? 10 : 5, hard: 10 }[dificultad];
   let monedas =
-    preguntasCorrectas.length * { easy: 3, medium: 6, hard: 12 }[dificultad];
+    preguntasCorrectas.length * { easy: 1, medium: 2, hard: 3 }[dificultad];
   const cat = categoriaId !== 0 ? `&category=${categoriaId}` : "";
   const url = `https://opentdb.com/api.php?amount=10${cat}&difficulty=${dificultad}&type=multiple`;
   const progreso = ((preguntaActual + 1) / 10) * 100;
@@ -58,18 +60,28 @@ export default function Trivia({
     if (respuestaSeleccionada) return;
     setRespuestaSeleccionada({ indice: index, estado: "Esperando" });
     setTimeout(() => {
-      if (resp === preguntas[preguntaActual].correct_answer) {
-        setPreguntasCorrectas((prev) => [...prev, preguntaActual]);
+      const esCorrecta = resp === preguntas[preguntaActual].correct_answer;
+      const nuevasCorrectas = esCorrecta
+        ? [...preguntasCorrectas, preguntaActual]
+        : preguntasCorrectas;
+      if (esCorrecta) {
+        setPreguntasCorrectas(nuevasCorrectas);
         setRespuestaSeleccionada({ indice: index, estado: "Correcta" });
       } else {
         setRespuestaSeleccionada({ indice: index, estado: "Incorrecta" });
       }
       setTimeout(() => {
-        setRespuestaSeleccionada();
         if (preguntaActual === preguntas.length - 1) {
-          handleFinalizarTrivia(xp, monedas, preguntasCorrectas.length);
+          const xpFinal =
+            nuevasCorrectas.length *
+            { easy: 1, medium: tieneExplorador ? 10 : 5, hard: 10 }[dificultad];
+          const monedasFinal =
+            nuevasCorrectas.length *
+            { easy: 1, medium: 2, hard: 3 }[dificultad];
+          handleFinalizarTrivia(xpFinal, monedasFinal, nuevasCorrectas.length);
           return;
         }
+        setRespuestaSeleccionada();
         setPreguntaActual((prev) => prev + 1);
       }, 1000);
     }, 1000);

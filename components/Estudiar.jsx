@@ -26,7 +26,6 @@ export default function Estudiar({ session }) {
   const [formData, setFormData] = useState(null);
   const [errores, setErrores] = useState({});
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const [pomodoroTime, setPomodoroTime] = useState({
     estudio: 25,
     descanso: 5,
@@ -70,7 +69,6 @@ export default function Estudiar({ session }) {
       return;
     }
 
-    setLoading(true);
     const { data, error } = await supabase.rpc("iniciar_sesion", {
       p_materia: formData?.materiaPersonalizada || formData?.materia,
       p_descripcion: formData?.descripcion ?? "",
@@ -78,7 +76,6 @@ export default function Estudiar({ session }) {
       p_descanso_min: pomodoroTime.descanso,
       p_cantidad_sesiones: pomodoroTime.sesiones,
     });
-    setLoading(false);
     if (error) {
       if (error.message.includes("Límite")) {
         setErrores({ general: "Alcanzaste el límite de sesiones por hoy." });

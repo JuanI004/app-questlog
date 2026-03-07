@@ -29,9 +29,7 @@ export default function Dashboard() {
   let monedasGanadas = searchParams.get("monedas");
   let rachaBonus = searchParams.get("bonus");
   let bonusHabilidades = searchParams.get("habilidades");
-  bonusHabilidades = bonusHabilidades
-    ? JSON.parse(decodeURIComponent(bonusHabilidades))
-    : [];
+  bonusHabilidades = bonusHabilidades ? JSON.parse(bonusHabilidades) : [];
   return (
     <>
       <div className="flex flex-col my-4 sm:flex-row justify-between w-7/8 gap-4 px-10 lg:w-5/8 py-6 rounded-sm border-[#2a5a8a]  items-center bg-[#060e18]/80 border">

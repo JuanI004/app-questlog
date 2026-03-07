@@ -14,14 +14,16 @@ export default function ModalRecompensas({
   const [visible, setVisible] = useState(false);
   const [xpVisible, setXpVisible] = useState(false);
   const [monedasVisible, setMonedasVisible] = useState(false);
+  const [habilidadesVisible, setHabilidadesVisible] = useState(false);
   const [botonVisible, setBotonVisible] = useState(false);
 
   useEffect(() => {
     const t1 = setTimeout(() => setVisible(true), 50);
     const t2 = setTimeout(() => setXpVisible(true), 400);
     const t3 = setTimeout(() => setMonedasVisible(true), 700);
-    const t4 = setTimeout(() => setBotonVisible(true), 1000);
-    return () => [t1, t2, t3, t4].forEach(clearTimeout);
+    const t4 = setTimeout(() => setHabilidadesVisible(true), 1000);
+    const t5 = setTimeout(() => setBotonVisible(true), 1300);
+    return () => [t1, t2, t3, t4, t5].forEach(clearTimeout);
   }, []);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
@@ -98,7 +100,16 @@ export default function ModalRecompensas({
           </div>
         </div>
         {bonusHabilidades.length > 0 && (
-          <div className="flex flex-col gap-2 w-full mb-5">
+          <div
+            className="flex flex-col gap-2 w-full mb-5"
+            style={{
+              opacity: habilidadesVisible ? 1 : 0,
+              transform: habilidadesVisible
+                ? "translateX(0)"
+                : "translateX(-20px)",
+              transition: "all 0.4s ease-out",
+            }}
+          >
             {bonusHabilidades.map((b, i) => (
               <div
                 key={i}

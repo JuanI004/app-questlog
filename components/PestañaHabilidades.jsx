@@ -1,4 +1,5 @@
 "use client";
+import { useDashboard } from "@/app/dashboard/layout";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -10,6 +11,7 @@ export default function PestañaHabilidades({
   nivelJugador,
   handleDesbloquear,
 }) {
+  const { player } = useDashboard();
   const [hoveredHabilidad, setHoveredHabilidad] = useState(null);
   const [habilidadSeleccionada, setHabilidadSeleccionada] = useState(null);
   function tieneHabilidad(habilidadId) {
@@ -24,7 +26,9 @@ export default function PestañaHabilidades({
     <div className="w-full flex flex-col items-center gap-2 pt-6">
       {habilidades.map((habilidad) => {
         const desbloqueada = tieneHabilidad(habilidad.id);
-        const disponible = nivelJugador >= habilidad.nivel_requerido;
+        const disponible =
+          nivelJugador >= habilidad.nivel_requerido &&
+          player.monedas >= habilidad.costo_monedas;
         const esPrevia = habilidades.filter(
           (h) => h.prerequisito_id === habilidad.id,
         );
@@ -89,7 +93,11 @@ export default function PestañaHabilidades({
                     Nivel{" "}
                     <span
                       style={{
-                        color: !disponible && !desbloqueada ? "red" : "green",
+                        color:
+                          !(nivelJugador >= habilidad.nivel_requerido) &&
+                          !desbloqueada
+                            ? "red"
+                            : "green",
                         fontWeight: "bold",
                       }}
                     >
@@ -99,7 +107,11 @@ export default function PestañaHabilidades({
                   <p className="text-[0.6rem] text-slate-400 uppercase  text-center tracking-widest">
                     <span
                       style={{
-                        color: !disponible && !desbloqueada ? "red" : "green",
+                        color:
+                          !(player.monedas >= habilidad.costo_monedas) &&
+                          !desbloqueada
+                            ? "red"
+                            : "green",
                         fontWeight: "bold",
                       }}
                     >
