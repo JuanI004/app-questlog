@@ -8,6 +8,14 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDashboard } from "../../layout";
 
+const VIDEOS = [
+  "WBnjO3zEwCM",
+  "q9gxhNCnmqs",
+  "4WIMyqBG9gs",
+  "YrZucNxoqr8",
+  "GkSHE6wOzX0",
+];
+
 const PRIORIDADES = [
   {
     valor: "baja",
@@ -63,6 +71,10 @@ export default function SesionPage({ params }) {
   const [mensajeVictoria, setMensajeVictoria] = useState("");
   const [modalAbandonar, setModalAbandonar] = useState(false);
   const [sesionTerminada, setSesionTerminada] = useState(false);
+  const shuffled = [...VIDEOS].sort(() => Math.random() - 0.5);
+  const [videoUrl, setVideoUrl] = useState(
+    `https://www.youtube.com/embed/${shuffled[0]}?loop=1&playlist=${shuffled.join(",")}`,
+  );
   const [tieneZona, setTieneZona] = useState(false);
   const timerColor = fase === "descanso" ? "#2AABB5" : "#D4A017";
   const timerColorRgb = fase === "descanso" ? "42,171,181" : "212,160,23";
@@ -113,31 +125,31 @@ export default function SesionPage({ params }) {
     finalizarSesion();
   }, [sesionTerminada]);
   useEffect(() => {
-    const timer = setInterval(() => {
-      setSegundos((prev) => {
-        if (prev <= 1) {
-          if (fase === "batalla") {
-            const audio = new Audio("/bell.mp3");
-            audio.play();
-            if (ronda >= sesion.cantidad_sesiones) {
-              setSesionTerminada(true);
-              return 0;
-            }
-            setFase("descanso");
-            return sesion.descanso_min * 60;
-          } else {
-            const audio = new Audio("/bell.mp3");
-            audio.play();
-            setFase("batalla");
-            setRonda((prevRonda) => prevRonda + 1);
-            return sesion.estudio_min * 60;
-          }
-        }
-        return prev - 1;
-      });
+    if (segundos === null || segundos === 0 || !sesion || !introTerminada)
+      return;
+    const timer = setTimeout(() => {
+      setSegundos((prev) => Math.max(0, prev - 1));
     }, 1000);
-    return () => clearInterval(timer);
-  }, [segundos, fase, ronda]);
+    return () => clearTimeout(timer);
+  }, [segundos, sesion, introTerminada]);
+
+  useEffect(() => {
+    if (segundos !== 0 || !sesion || !introTerminada) return;
+    const audio = new Audio("/bell.mp3");
+    audio.play();
+    if (fase === "batalla") {
+      if (ronda >= sesion.cantidad_sesiones) {
+        setSesionTerminada(true);
+      } else {
+        setFase("descanso");
+        setSegundos(sesion.descanso_min * 60);
+      }
+    } else {
+      setFase("batalla");
+      setRonda((prev) => prev + 1);
+      setSegundos(sesion.estudio_min * 60);
+    }
+  }, [segundos, fase, ronda, sesion, introTerminada]);
   async function cancelarSesion() {
     await supabase
       .from("sesiones")
@@ -225,7 +237,7 @@ export default function SesionPage({ params }) {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 flex-col gap-8 w-7/8 lg:w-5/8  ">
+      <div className="grid grid-cols-1 md:grid-cols-2 flex-col md:gap-8 gap-4 w-7/8 lg:w-5/8  ">
         <div className="flex flex-col gap-4">
           <div
             className={`relative not-visited:flex flex-col justify-center items-center  w-full h-50 p-5rounded-sm
@@ -282,15 +294,19 @@ export default function SesionPage({ params }) {
             </div>
           </div>
           <div
-            className={`relative not-visited:flex flex-col justify-center items-center  w-full aspect-video rounded-sm
+            className={`relative  not-visited:flex flex-col justify-center items-center  w-full aspect-video rounded-sm
      border-[#2a5a8a] bg-linear-to-br from-[#0d1e30] via-[#0a1828] overflow-hidden to-[#060e18] border`}
           >
-            <p className="text-slate-500 text-xl">Juego próximamente...</p>
+            <iframe
+              src={videoUrl}
+              className="absolute inset-0 w-full h-full"
+              allowFullScreen
+            ></iframe>
           </div>
         </div>
 
         <div
-          className="relative flex flex-col  overflow-scroll  w-full  rounded-sm
+          className="relative flex flex-col  overflow-scroll  w-full min-h-100  rounded-sm
      border-[#2a5a8a] bg-linear-to-br from-[#10253b] via-[#0d1e31] to-[#060f1a] border"
         >
           <div className="flex flex-col p-4">
@@ -524,7 +540,7 @@ export default function SesionPage({ params }) {
       <button
         onClick={() => setModalAbandonar(true)}
         className="px-4 py-2 rounded-sm uppercase tracking-wide font-bold border border-[#2a5a8a] 
-      text-[#a08c50] bg-[#060e18]/80 hover:bg-[#060e18] hover:text-[#D4A017] cursor-pointer transition-all"
+        text-[#a08c50] bg-[#060e18]/80 hover:bg-[#060e18] hover:text-[#D4A017] cursor-pointer transition-all"
       >
         Abandonar Sesión
       </button>

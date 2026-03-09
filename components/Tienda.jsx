@@ -60,6 +60,7 @@ export default function Tienda() {
   const [itemsComprados, setItemsComprados] = useState([]);
   const [mensaje, setMensaje] = useState(null);
   const [tieneComerciante, setTieneComerciante] = useState(false);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (mensaje) {
       const timer = setTimeout(() => {
@@ -77,6 +78,7 @@ export default function Tienda() {
         .order("nombre", { ascending: true });
       if (error) {
         setMensaje({ error: error.message });
+        setLoading(false);
         return;
       }
       setItems(data);
@@ -94,9 +96,11 @@ export default function Tienda() {
       const { data, error } = await supabase.from("player_items").select("*");
       if (error) {
         setMensaje({ error: error.message });
+        setLoading(false);
         return;
       }
       setItemsComprados(data);
+      setLoading(false);
     }
     fetchHabilidades();
     fetchItems();
@@ -208,17 +212,36 @@ export default function Tienda() {
           </div>
         </div>
       )}
-      <PestañaTienda
-        filtroRareza={filtroRareza}
-        rarezas={RAREZAS}
-        categoria={pestaña}
-        items={itemsFiltrados}
-        itemsComprados={itemsComprados}
-        mensaje={mensaje}
-        handleComprar={handleComprar}
-        handleEquipar={handleEquipar}
-        tieneComerciante={tieneComerciante}
-      />
+
+      {loading ? (
+        <div className="w-full h-100 flex items-center justify-center ">
+          <div className="flex flex-col items-center gap-4">
+            <div
+              className="w-8 h-8 border-2 rounded-full animate-spin"
+              style={{ borderColor: "#D4A017", borderTopColor: "transparent" }}
+            />
+          </div>
+        </div>
+      ) : (
+        <PestañaTienda
+          filtroRareza={filtroRareza}
+          rarezas={RAREZAS}
+          categoria={pestaña}
+          items={itemsFiltrados}
+          itemsComprados={itemsComprados}
+          mensaje={mensaje}
+          handleComprar={handleComprar}
+          handleEquipar={handleEquipar}
+          tieneComerciante={tieneComerciante}
+        />
+      )}
+      {mensaje && (
+        <div
+          className={`px-4 py-2 rounded ${mensaje.error ? "bg-red-500 text-white" : "bg-green-500 text-white"}`}
+        >
+          {mensaje.error || mensaje.success}
+        </div>
+      )}
     </div>
   );
 }

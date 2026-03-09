@@ -36,6 +36,7 @@ export default function ArbolHabilidades({ session }) {
   const [habilidadesJugador, setHabilidadesJugador] = useState([]);
   const [pestaña, setPestaña] = useState("disciplina");
   const [nivelJugador, setNivelJugador] = useState();
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchPlayerLevel = async () => {
       const { data, error } = await supabase
@@ -45,6 +46,7 @@ export default function ArbolHabilidades({ session }) {
         .single();
       if (error) {
         setError(error);
+        setLoading(false);
       } else {
         setNivelJugador(data.nivel);
       }
@@ -61,9 +63,11 @@ export default function ArbolHabilidades({ session }) {
           .eq("user_id", session.user.id);
       if (error) {
         setError(error);
+        setLoading(false);
       } else {
         setHabilidades(data);
         setHabilidadesJugador(habilidadesJugador);
+        setLoading(false);
       }
     };
     fetchHabilidades();
@@ -119,35 +123,55 @@ export default function ArbolHabilidades({ session }) {
         />
       )}
       <div className="w-full justify-center flex">
-        {pestaña === "disciplina" && (
-          <PestañaHabilidades
-            habilidades={habilidades.filter((h) => h.rama === "disciplina")}
-            habilidadesJugador={habilidadesJugador}
-            color={RAMA_CONFIG[pestaña].color}
-            colorRgb={RAMA_CONFIG[pestaña].colorRgb}
-            nivelJugador={nivelJugador}
-            handleDesbloquear={handleDesbloquear}
-          />
-        )}
-        {pestaña === "concentracion" && (
-          <PestañaHabilidades
-            habilidades={habilidades.filter((h) => h.rama === "concentracion")}
-            habilidadesJugador={habilidadesJugador}
-            color={RAMA_CONFIG[pestaña].color}
-            colorRgb={RAMA_CONFIG[pestaña].colorRgb}
-            nivelJugador={nivelJugador}
-            handleDesbloquear={handleDesbloquear}
-          />
-        )}
-        {pestaña === "exploracion" && (
-          <PestañaHabilidades
-            habilidades={habilidades.filter((h) => h.rama === "exploracion")}
-            habilidadesJugador={habilidadesJugador}
-            color={RAMA_CONFIG[pestaña].color}
-            colorRgb={RAMA_CONFIG[pestaña].colorRgb}
-            nivelJugador={nivelJugador}
-            handleDesbloquear={handleDesbloquear}
-          />
+        {loading ? (
+          <div className="w-full h-100 flex items-center justify-center ">
+            <div className="flex flex-col items-center gap-4">
+              <div
+                className="w-8 h-8 border-2 rounded-full animate-spin"
+                style={{
+                  borderColor: "#D4A017",
+                  borderTopColor: "transparent",
+                }}
+              />
+            </div>
+          </div>
+        ) : (
+          <>
+            {pestaña === "disciplina" && (
+              <PestañaHabilidades
+                habilidades={habilidades.filter((h) => h.rama === "disciplina")}
+                habilidadesJugador={habilidadesJugador}
+                color={RAMA_CONFIG[pestaña].color}
+                colorRgb={RAMA_CONFIG[pestaña].colorRgb}
+                nivelJugador={nivelJugador}
+                handleDesbloquear={handleDesbloquear}
+              />
+            )}
+            {pestaña === "concentracion" && (
+              <PestañaHabilidades
+                habilidades={habilidades.filter(
+                  (h) => h.rama === "concentracion",
+                )}
+                habilidadesJugador={habilidadesJugador}
+                color={RAMA_CONFIG[pestaña].color}
+                colorRgb={RAMA_CONFIG[pestaña].colorRgb}
+                nivelJugador={nivelJugador}
+                handleDesbloquear={handleDesbloquear}
+              />
+            )}
+            {pestaña === "exploracion" && (
+              <PestañaHabilidades
+                habilidades={habilidades.filter(
+                  (h) => h.rama === "exploracion",
+                )}
+                habilidadesJugador={habilidadesJugador}
+                color={RAMA_CONFIG[pestaña].color}
+                colorRgb={RAMA_CONFIG[pestaña].colorRgb}
+                nivelJugador={nivelJugador}
+                handleDesbloquear={handleDesbloquear}
+              />
+            )}
+          </>
         )}
       </div>
       {error && (

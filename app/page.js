@@ -13,18 +13,18 @@ import Link from "next/link";
 const FEATURES = [
   {
     icon: misionesImg,
-    title: "Misiones Diarias",
-    desc: "Cada tarea es una misión. Completalas y ganás XP real.",
-  },
-  {
-    icon: logrosImg,
-    title: "Logros & Rangos",
-    desc: "Desbloqueá insignias épicas al alcanzar tus metas académicas.",
+    title: "Sesiones de Estudio",
+    desc: "Cada sesión completada te da XP y monedas reales. Acumulá racha diaria y multiplicá tus recompensas.",
   },
   {
     icon: habilidadesImg,
     title: "Árbol de Habilidades",
-    desc: "Elegí tu especialización y subí de nivel tus conocimientos.",
+    desc: "Desbloqueá 15 habilidades únicas que cambian cómo jugás: más XP, rachas más fuertes, bonus de monedas y más.",
+  },
+  {
+    icon: logrosImg,
+    title: "Flashcards & Trivia",
+    desc: "Poné a prueba tu conocimiento con preguntas de trivia. Respondé bien y ganá recompensas extra.",
   },
 ];
 
@@ -148,7 +148,7 @@ export default function Home() {
           disciplina en experiencia. Subí de nivel como estudiante, desbloqueá
           habilidades y construí tu propio camino hacia la maestría.
         </p>
-        <p className="text-[#D4A017] mt-4 font-bold text-xl">
+        <p className="text-[#D4A017] mt-4 font-bold text-xl z-2">
           Tu aventura académica comienza aquí.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full  p-6 max-w-350">
@@ -169,7 +169,7 @@ export default function Home() {
               <h3 className="title font-cinzel text-2xl font-bold text-[#F0C040] tracking-wide">
                 {f.title}
               </h3>
-              <p className="text-slate-400 text-xl leading-relaxed text-center">
+              <p className="text-slate-400 text-lg max-w-55 leading-relaxed text-center">
                 {f.desc}
               </p>
             </div>

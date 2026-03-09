@@ -111,7 +111,6 @@ export default function Flashcards({ session }) {
           ? data.flashcards_hoy
           : 0;
       setUsosRestantes(Math.max(0, limiteFlashcards - usosHoy));
-      console.log("Usos restantes:", Math.max(0, limiteFlashcards - usosHoy));
     };
     fetchUsos();
   }, [session.user.id]);

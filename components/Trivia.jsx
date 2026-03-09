@@ -104,7 +104,7 @@ export default function Trivia({
 
   if (loading || error) {
     return (
-      <div className="w-full h-20 flex items-center justify-center bg-[#060e18]">
+      <div className="w-full h-100 flex items-center justify-center ">
         <div className="flex flex-col items-center gap-4">
           <div
             className="w-8 h-8 border-2 rounded-full animate-spin"

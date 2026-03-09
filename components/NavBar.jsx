@@ -153,7 +153,7 @@ export default function NavBar() {
       />
       {open && (
         <div
-          className={`flex flex-col justify-between  w-6/8 opacity-100 md:opacity-0  ease-in-out transition-all duration-300  ${open && "w-6/8"} fixed h-[calc(100vh-3rem)] right-0 top-20  z-60 
+          className={`flex flex-col justify-between  w-6/8 opacity-100 md:opacity-0  ease-in-out transition-all duration-300  ${open && "w-6/8"} fixed h-[calc(100vh-5rem)] right-0 top-20  z-60 
         bg-linear-to-t from-[#060e18] via-[#0a1828] to-[#0d1e30] border-x-2 border-[#17324d] `}
         >
           <div>
